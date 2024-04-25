@@ -4,7 +4,7 @@ import os
 from django.http import JsonResponse
 import pandas as pd
 from ml_model.models.linear_regression import LumbaLinearRegression
-from ml_model.models.decision_tree import LumbaDecisionTreeClassifier
+from ml_model.models.decision_tree_classification import LumbaDecisionTreeClassifier
 import requests
 import joblib
 
