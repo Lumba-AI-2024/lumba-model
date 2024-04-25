@@ -1,0 +1,110 @@
+{
+	"info": {
+		"_postman_id": "e673d8d6-5881-4a16-99b6-96441734e749",
+		"name": "Modelling",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "train",
+			"id": "850f42f7-8d7b-43a4-b56c-b03e2d5e1089",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+							"filesNotInWorkingDirectory": [
+								"/C:/Users/Bhisma/Desktop/Skripsi/lumba-ai/lumba-preprocess/directory/gbhisma/ws1/affairs.csv"
+							],
+							"src": "/C:/Users/Bhisma/Desktop/Skripsi/lumba-ai/lumba-preprocess/directory/gbhisma/ws1/affairs.csv"
+						},
+						{
+							"key": "model_name",
+							"value": "model#1",
+							"type": "text"
+						},
+						{
+							"key": "file_name",
+							"value": "affairs.csv",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "gbhisma",
+							"type": "text"
+						},
+						{
+							"key": "workspace",
+							"value": "ws1",
+							"type": "text"
+						},
+						{
+							"key": "method",
+							"value": "REGRESSION",
+							"type": "text"
+						},
+						{
+							"key": "algorithm",
+							"value": "LINEAR",
+							"type": "text"
+						},
+						{
+							"key": "feature",
+							"value": "rate_marriage,age,yrs_married,children,religious,educ,occupation,occupation_husb",
+							"type": "text"
+						},
+						{
+							"key": "target",
+							"value": "affairs",
+							"type": "text"
+						}
+					]
+				},
+				"url": "{{base_url}}/train/"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "340c9ce9-4921-4a2c-ab72-51b7c8f153e0",
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "b5d9a72b-bdfd-4962-b9c7-c6748d9c497c",
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:7000",
+			"type": "string"
+		}
+	]
+}
