@@ -54,7 +54,7 @@ class LumbaKMeans:
         return {
             'model': km_model,
             'labels_predicted': kmeans_cluster_labels,
-            'mean_absolute_error': f'{silhouette:.4f}'
+            'silhouette_score': f'{silhouette:.4f}'
         }
 
     def get_model(self) -> Optional[KMeans]:

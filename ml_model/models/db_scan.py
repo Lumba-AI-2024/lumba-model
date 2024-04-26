@@ -67,7 +67,7 @@ class LumbaDBScan:
         return {
             'model': optimal_dbscan,
             'labels_predicted': dbscan_cluster_labels,
-            'mean_absolute_error': f'{silhouette:.4f}'
+            'silhouette_score': f'{silhouette:.4f}'
         }
 
     def get_model(self) -> Optional[DBSCAN]:

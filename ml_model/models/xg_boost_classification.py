@@ -7,7 +7,7 @@ from pandas.core.frame import DataFrame
 
 from typing import Any, Optional, Union, List
 
-class LumbaXGBoost:
+class LumbaXGBoostClassifier:
     model: XGBClassifier
 
     def __init__(self, dataframe: DataFrame) -> None:

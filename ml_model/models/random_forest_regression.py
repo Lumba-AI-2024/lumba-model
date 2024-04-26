@@ -6,7 +6,7 @@ from pandas.core.frame import DataFrame
 
 from typing import Any, List, Optional
 
-class LumbaRandomForestClassifier:
+class LumbaRandomForestRegressor:
     model: RandomForestRegressor
 
     def __init__(self, dataframe: DataFrame) -> None:
