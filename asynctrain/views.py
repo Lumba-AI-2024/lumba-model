@@ -32,29 +32,29 @@ async def asynctrain(df, training_record, model_metadata):
 	if model_metadata['method'] == 'REGRESSION':
 		if model_metadata['algorithm'] == 'LINEAR':
 			LRR = LumbaLinearRegression(df)
-			response = LRR.train_model(train_column_name=model_metadata['feature'].split(','), target_column_name=model_metadata['target'])
-			model_metadata["metrics"] = "mean_absolute_error"
-			model_metadata["score"] = response["mean_absolute_error"]
+			response = LRR.train_model(target_column_name=model_metadata['target'])
+			model_metadata["metrics"] = "r2_score"
+			model_metadata["score"] = response["r2_score"]
 		if model_metadata['algorithm'] == 'DECISION_TREE':
 			DTR = LumbaDecisionTreeRegressor(df)
-			response = DTR.train_model(train_column_name=model_metadata['feature'].split(','), target_column_name=model_metadata['target'])
-			model_metadata["metrics"] = "mean_absolute_error"
-			model_metadata["score"] = response["mean_absolute_error"]
+			response = DTR.train_model(target_column_name=model_metadata['target'])
+			model_metadata["metrics"] = "r2_score"
+			model_metadata["score"] = response["r2_score"]
 		if model_metadata['algorithm'] == 'RANDOM_FOREST':
 			RFR = LumbaRandomForestRegressor(df)
-			response = RFR.train_model(train_column_name=model_metadata['feature'].split(','), target_column_name=model_metadata['target'])
-			model_metadata["metrics"] = "mean_absolute_error"
-			model_metadata["score"] = response["mean_absolute_error"]
+			response = RFR.train_model(target_column_name=model_metadata['target'])
+			model_metadata["metrics"] = "r2_score"
+			model_metadata["score"] = response["r2_score"]
 		if model_metadata['algorithm'] == 'NEURAL_NETWORK':
 			NNR = LumbaNeuralNetworkRegression(df)
-			response = NNR.train_model(train_column_name=model_metadata['feature'].split(','), target_column_name=model_metadata['target'])
-			model_metadata["metrics"] = "mean_absolute_error"
-			model_metadata["score"] = response["mean_absolute_error"]		
+			response = NNR.train_model(target_column_name=model_metadata['target'])
+			model_metadata["metrics"] = "r2_score"
+			model_metadata["score"] = response["r2_score"]		
 		if model_metadata['algorithm'] == 'XG_BOOST':
 			XBR = LumbaXGBoostRegressor(df)
-			response = XBR.train_model(train_column_name=model_metadata['feature'].split(','), target_column_name=model_metadata['target'])
-			model_metadata["metrics"] = "mean_absolute_error"
-			model_metadata["score"] = response["mean_absolute_error"]		
+			response = XBR.train_model(target_column_name=model_metadata['target'])
+			model_metadata["metrics"] = "r2_score"
+			model_metadata["score"] = response["r2_score"]		
 	
 	if model_metadata['method'] == 'CLASSIFICATION':
 		if model_metadata['algorithm'] == 'DECISION_TREE':
@@ -63,7 +63,7 @@ async def asynctrain(df, training_record, model_metadata):
 			model_metadata["metrics"] = "accuracy_score"
 			model_metadata["score"] = response["accuracy_score"]
 		if model_metadata['algorithm'] == 'NEURAL_NETWORK':
-			NNC = LumbaRandomForestClassifier(df)
+			NNC = LumbaNeuralNetworkClassification(df)
 			response = NNC.train_model(train_column_names=model_metadata['feature'].split(','), target_column_name=model_metadata['target'])
 			model_metadata["metrics"] = "accuracy_score"
 			model_metadata["score"] = response["accuracy_score"]
@@ -80,13 +80,13 @@ async def asynctrain(df, training_record, model_metadata):
 
 	if model_metadata['method'] == 'CLUSTER':
 		if model_metadata['algorithm'] == 'KMEANS':
-			KM = LumbaDecisionTreeClassifier(df)
+			KM = LumbaKMeans(df)
 			response = KM.train_model(train_column_names=model_metadata['feature'].split(','), target_column_name=model_metadata['target'])
 			model_metadata["metrics"] = "silhouette_score"
 			model_metadata["score"] = response["silhouette_score"]
 			model_metadata["labels"] = response["labels_predicted"]
 		if model_metadata['algorithm'] == 'DB_SCAN':
-			DB = LumbaRandomForestClassifier(df)
+			DB = LumbaDBScan(df)
 			response = DB.train_model(train_column_names=model_metadata['feature'].split(','), target_column_name=model_metadata['target'])
 			model_metadata["metrics"] = "silhouette_score"
 			model_metadata["score"] = response["silhouette_score"]
