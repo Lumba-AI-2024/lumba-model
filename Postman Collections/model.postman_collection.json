@@ -25,23 +25,24 @@
 							"type": "file",
 							"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
 							"filesNotInWorkingDirectory": [
-								"/C:/Users/Bhisma/Desktop/Skripsi/lumba-ai/lumba-preprocess/directory/gbhisma/ws1/affairs.csv"
+								"/C:/Users/Bhisma/Desktop/Skripsi/lumba-ai/lumba_api_v2/directory/gbhisma/ws1/affairs.csv"
 							],
-							"src": "/C:/Users/Bhisma/Desktop/Skripsi/lumba-ai/lumba-preprocess/directory/gbhisma/ws1/affairs.csv"
+							"src": "/C:/Users/Bhisma/Desktop/Skripsi/lumba-ai/lumba_api_v2/directory/gbhisma/ws1/affairs.csv",
+							"disabled": true
 						},
 						{
 							"key": "model_name",
-							"value": "model#1",
+							"value": "affairs",
 							"type": "text"
 						},
 						{
-							"key": "file_name",
+							"key": "datasetname",
 							"value": "affairs.csv",
 							"type": "text"
 						},
 						{
 							"key": "username",
-							"value": "gbhisma",
+							"value": "bhisma",
 							"type": "text"
 						},
 						{
@@ -67,6 +68,11 @@
 						{
 							"key": "target",
 							"value": "affairs",
+							"type": "text"
+						},
+						{
+							"key": "file_path",
+							"value": "C:\\Users\\Bhisma\\Desktop\\Skripsi\\lumba-ai\\lumba_api_v2\\directory\\bhisma\\ws1\\affairs_HRB5n3e.csv",
 							"type": "text"
 						}
 					]
