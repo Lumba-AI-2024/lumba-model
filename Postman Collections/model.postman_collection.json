@@ -27,7 +27,8 @@
 							"filesNotInWorkingDirectory": [
 								"/C:/Users/Bhisma/Desktop/Skripsi/lumba-ai/lumba_api_v2/directory/gbhisma/ws1/affairs.csv"
 							],
-							"src": "/C:/Users/Bhisma/Desktop/Skripsi/lumba-ai/lumba_api_v2/directory/gbhisma/ws1/affairs.csv"
+							"src": "/C:/Users/Bhisma/Desktop/Skripsi/lumba-ai/lumba_api_v2/directory/gbhisma/ws1/affairs.csv",
+							"disabled": true
 						},
 						{
 							"key": "model_name",
@@ -71,7 +72,7 @@
 						},
 						{
 							"key": "file_path",
-							"value": "C:\\Users\\Bhisma\\Desktop\\Skripsi\\lumba-ai\\lumba_api_v2\\directory\\gbhisma\\ws1\\affairs.csv",
+							"value": "C:\\Users\\Bhisma\\Desktop\\Skripsi\\lumba-ai\\lumba_api_v2\\directory\\bhisma\\ws1\\affairs_HRB5n3e.csv",
 							"type": "text"
 						}
 					]
