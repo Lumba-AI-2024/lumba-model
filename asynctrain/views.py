@@ -18,7 +18,7 @@ async def asynctrain(df, model_metadata):
     print(model_metadata)
     requests.put(url,
                  params={
-                     'modelname': model_metadata['model_name'],
+                     'modelname': model_metadata['modelname'],
                      'datasetname': model_metadata['datasetname'],
                      'workspace': model_metadata['workspace'],
                      'username': model_metadata['username']
@@ -44,30 +44,21 @@ async def asynctrain(df, model_metadata):
             model_metadata["score"] = response["accuracy_score"]
 
     # save model to pkl format
-    model_saved_name = f"{model_metadata['model_name']}.pkl"
+    model_saved_name = f"{model_metadata['modelname']}.pkl"
     joblib.dump(response['model'], model_saved_name)
-
-    # save model
-    # TODO: commented out for dev
-    # url = 'http://127.0.0.1:8000/modeling/save/'
-    # requests.post(url, data=model_metadata, files={'file': open(model_saved_name, 'rb')})
-
-    # update training record to 'completed'
-    # TODO: commented out for dev
-    # url = 'http://127.0.0.1:8000/modeling/updaterecord/'
-    # json = {'id': training_record['id'], 'status':'completed'}
-    # record = requests.post(url, json=json)
-
+    print(model_saved_name)
     requests.put(url,
                  params={
-                     'modelname': model_metadata['model_name'],
+                     'modelname': model_metadata['modelname'],
                      'datasetname': model_metadata['datasetname'],
                      'workspace': model_metadata['workspace'],
                      'username': model_metadata['username'],
                  },
                  data={
                      'status': 'completed',
-                     'file': open(model_saved_name, 'rb')
+                 },
+                 files={
+                     'model_file': open(model_saved_name, 'rb')
                  }
                  )
     # os.remove(model_saved_name)
@@ -81,7 +72,7 @@ async def async_train_endpoint(request):
     """
         Input the entire
     """
-
+    print(request.POST.dict())
     try:
         model_metadata = request.POST.dict()
         # TODO: get the file from request, or get them from minio
@@ -91,7 +82,7 @@ async def async_train_endpoint(request):
 
     print(model_metadata)
 
-    df = pandas.read_csv(model_metadata['file_path'])
+    df = pandas.read_csv(request.FILES['file'])
 
     await asyncio.gather(asynctrain(df, model_metadata))
     return JsonResponse(model_metadata, status=200)
