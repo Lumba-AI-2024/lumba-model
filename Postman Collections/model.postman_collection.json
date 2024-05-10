@@ -21,17 +21,8 @@
 					"mode": "formdata",
 					"formdata": [
 						{
-							"key": "file",
-							"type": "file",
-							"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
-							"filesNotInWorkingDirectory": [
-								"/D:/bhism/Desktop/Kuliah/Semester8/TA/DATASET/DATASET/affairs.csv"
-							],
-							"src": "/D:/bhism/Desktop/Kuliah/Semester8/TA/DATASET/DATASET/affairs.csv"
-						},
-						{
 							"key": "modelname",
-							"value": "affairs5",
+							"value": "affairs",
 							"type": "text"
 						},
 						{
@@ -40,13 +31,23 @@
 							"type": "text"
 						},
 						{
+							"key": "workspace",
+							"value": "ws1100",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "predicting",
+							"type": "text"
+						},
+						{
 							"key": "username",
 							"value": "hera",
 							"type": "text"
 						},
 						{
-							"key": "workspace",
-							"value": "ws10",
+							"key": "dataset_link",
+							"value": "hera/ws1100/predicting/affairs.csv",
 							"type": "text"
 						},
 						{
@@ -60,6 +61,11 @@
 							"type": "text"
 						},
 						{
+							"key": "metrics",
+							"value": "-",
+							"type": "text"
+						},
+						{
 							"key": "feature",
 							"value": "rate_marriage,age,yrs_married,children,religious,educ,occupation,occupation_husb",
 							"type": "text"
@@ -70,9 +76,13 @@
 							"type": "text"
 						},
 						{
-							"key": "file_path",
-							"value": "C:\\Users\\Bhisma\\Desktop\\Skripsi\\lumba-ai\\lumba_api_v2\\directory\\bhisma\\ws1\\affairs_HRB5n3e.csv",
-							"type": "text",
+							"key": "file",
+							"type": "file",
+							"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+							"filesNotInWorkingDirectory": [
+								"/D:/bhism/Desktop/Kuliah/Semester8/TA/DATASET/DATASET/affairs.csv"
+							],
+							"src": "/D:/bhism/Desktop/Kuliah/Semester8/TA/DATASET/DATASET/affairs.csv",
 							"disabled": true
 						}
 					]
