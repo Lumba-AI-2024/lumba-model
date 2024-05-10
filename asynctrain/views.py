@@ -22,7 +22,5 @@ def async_train_endpoint(request):
 
     print(model_metadata)
 
-    df = pandas.read_csv(request.FILES['file'])
-
-    asynctrain.apply_async(args=[df, model_metadata])
+    asynctrain.delay(model_metadata)
     return JsonResponse(model_metadata, status=200)

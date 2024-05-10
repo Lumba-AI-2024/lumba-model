@@ -1,17 +1,32 @@
 import joblib
+import pandas
 import requests
 from celery import shared_task
+from minio import Minio
 
 from ml_model.models.decision_tree import LumbaDecisionTreeClassifier
 from ml_model.models.linear_regression import LumbaLinearRegression
 
 
 @shared_task
-def asynctrain(df, model_metadata):
+def asynctrain(model_metadata):
     # update training record to 'in progress'
     # TODO: commented out for dev
     url = 'http://127.0.0.1:8000/modeling/'
+
     print(model_metadata)
+
+    minio_client = Minio("34.101.59.56:9000",
+                         access_key="zl6ggTd5WUAaV2NMaGJj",
+                         secret_key="mtUHWqwV2GlpW8eALQ0quZEWCHkZqQlbBAXKuXus",
+                         secure=False)
+
+    obj = minio_client.get_object('lumba-directory',
+                                  model_metadata['dataset_link'])
+
+    df = pandas.read_csv(obj)
+
+
     requests.put(url,
                  params={
                      'modelname': model_metadata['modelname'],
@@ -51,6 +66,7 @@ def asynctrain(df, model_metadata):
                      'username': model_metadata['username'],
                  },
                  data={
+                     **model_metadata,
                      'status': 'completed',
                  },
                  files={
