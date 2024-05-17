@@ -1,4 +1,16 @@
-from sklearn.linear_model import LinearRegression
+import subprocess
+
+# Upgrade TensorFlow
+subprocess.run(["pip", "install", "--upgrade", "tensorflow"])
+
+# Upgrade Keras
+subprocess.run(["pip", "install", "--upgrade", "keras"])
+
+import tensorflow as tf
+import numpy as np
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from scikeras.wrappers import KerasRegressor
 from sklearn.model_selection import GridSearchCV,train_test_split, KFold
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, r2_score, mean_squared_error
@@ -7,8 +19,8 @@ from pandas.core.frame import DataFrame
 
 from typing import Any, Optional, Union, List
 
-class LumbaLinearRegression:
-    model: LinearRegression
+class LumbaNeuralNetworkRegression:
+    model: KerasRegressor
 
     def __init__(self, dataframe: DataFrame) -> None:
         self.dataframe = dataframe
@@ -37,24 +49,43 @@ class LumbaLinearRegression:
         #     x = self.dataframe[train_column_name].to_numpy()
 
         # y = self.dataframe[target_column_name].to_numpy().reshape(-1, 1)
+
         X = self.dataframe.drop(columns=[target_column_name])
         y = self.dataframe[target_column_name]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
-        lr = LinearRegression()
+        # Set seed for NumPy
+        np.random.seed(42)
+
+        # Set seed for TensorFlow
+        tf.random.set_seed(42)
+        
+        # Define a function to create model
+        def create_model(optimizer='adam', activation='relu', units1=64, units2=32):
+            model = Sequential([
+                Dense(units1, activation=activation, input_shape=(X.shape[1],)),
+                Dense(units2, activation=activation),
+                Dense(1)
+            ])
+            model.compile(optimizer=optimizer, loss='mean_squared_error', metrics=['mae'])
+            return model
+
+        # Wrap the Keras model in a KerasClassifier
+        kr = KerasRegressor(build_fn=create_model, verbose=0)
 
         # Define the grid search parameters
         param_grid = {
-            'fit_intercept': [True, False],  # Whether to calculate the intercept for this model
-            'copy_X': [True, False],  # Whether to make a copy of X before fitting the model
-            'n_jobs': [-1],  # Number of jobs to run in parallel. -1 means using all processors.
-            'positive' : [True, False]
+            'optimizer': ['adam', 'rmsprop'],
+            'activation': ['relu', 'sigmoid'],
+            'units1': [32, 64, 128],
+            'units2': [16, 32, 64],
+            'epochs': [10, 20, 30, 40,50]  # Adjust the values as needed
         }
 
         outer_cv = KFold(n_splits=5, shuffle=True, random_state=42)
 
         # Perform grid search
-        grid = GridSearchCV(estimator=lr, param_grid=param_grid, cv=outer_cv)
+        grid = GridSearchCV(estimator=kr, param_grid=param_grid, cv=outer_cv)
         grid_result = grid.fit(X_train, y_train)  # Assuming X and y are your feature matrix and target vector
         
         best_hyperparams = grid_result.best_params_
@@ -66,17 +97,17 @@ class LumbaLinearRegression:
         mae = mean_absolute_error(y_true=y_test, y_pred=y_pred)
         mse = mean_squared_error(y_true=y_test, y_pred=y_pred)
 
-        self.model = lr
+        self.model = kr
 
         return {
-            'model': lr,
+            'model': kr,
             'best_hyperparams': best_hyperparams,
             'mean_absolute_error': f'{mae:.4f}',
             'mean_squared_error': f'{mse:.4f}',
             'r2_score': f'{r2:.4f}'
         }
     
-    def get_model(self) -> Optional[LinearRegression]:
+    def get_model(self) -> Optional[KerasRegressor]:
         try:
             return self.model
         except AttributeError:
