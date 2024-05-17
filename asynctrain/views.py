@@ -59,35 +59,35 @@ async def asynctrain(df, training_record, model_metadata):
 	if model_metadata['method'] == 'CLASSIFICATION':
 		if model_metadata['algorithm'] == 'DECISION_TREE':
 			DTC = LumbaDecisionTreeClassifier(df)
-			response = DTC.train_model(train_column_names=model_metadata['feature'].split(','), target_column_name=model_metadata['target'])
+			response = DTC.train_model(target_column_name=model_metadata['target'])
 			model_metadata["metrics"] = "accuracy_score"
 			model_metadata["score"] = response["accuracy_score"]
 		if model_metadata['algorithm'] == 'NEURAL_NETWORK':
 			NNC = LumbaNeuralNetworkClassification(df)
-			response = NNC.train_model(train_column_names=model_metadata['feature'].split(','), target_column_name=model_metadata['target'])
+			response = NNC.train_model(target_column_name=model_metadata['target'])
 			model_metadata["metrics"] = "accuracy_score"
 			model_metadata["score"] = response["accuracy_score"]
 		if model_metadata['algorithm'] == 'RANDOM_FOREST':
-			RFC = LumbaDecisionTreeClassifier(df)
-			response = RFC.train_model(train_column_names=model_metadata['feature'].split(','), target_column_name=model_metadata['target'])
+			RFC = LumbaRandomForestClassifier(df)
+			response = RFC.train_model(target_column_name=model_metadata['target'])
 			model_metadata["metrics"] = "accuracy_score"
 			model_metadata["score"] = response["accuracy_score"]
 		if model_metadata['algorithm'] == 'XG_BOOST':
 			XGC = LumbaXGBoostClassifier(df)
-			response = XGC.train_model(train_column_names=model_metadata['feature'].split(','), target_column_name=model_metadata['target'])
+			response = XGC.train_model(target_column_name=model_metadata['target'])
 			model_metadata["metrics"] = "accuracy_score"
 			model_metadata["score"] = response["accuracy_score"]
 
 	if model_metadata['method'] == 'CLUSTER':
 		if model_metadata['algorithm'] == 'KMEANS':
 			KM = LumbaKMeans(df)
-			response = KM.train_model(train_column_names=model_metadata['feature'].split(','), target_column_name=model_metadata['target'])
+			response = KM.train_model(target_column_name=model_metadata['target'])
 			model_metadata["metrics"] = "silhouette_score"
 			model_metadata["score"] = response["silhouette_score"]
 			model_metadata["labels"] = response["labels_predicted"]
 		if model_metadata['algorithm'] == 'DB_SCAN':
 			DB = LumbaDBScan(df)
-			response = DB.train_model(train_column_names=model_metadata['feature'].split(','), target_column_name=model_metadata['target'])
+			response = DB.train_model(target_column_name=model_metadata['target'])
 			model_metadata["metrics"] = "silhouette_score"
 			model_metadata["score"] = response["silhouette_score"]
 			model_metadata["labels"] = response["labels_predicted"]
@@ -95,6 +95,10 @@ async def asynctrain(df, training_record, model_metadata):
 	# save model to pkl format
 	model_saved_name = f"{model_metadata['model_name']}.pkl"
 	joblib.dump(response['model'], model_saved_name)
+
+	# save the pkl in the model_metadata
+	model_metadata['model'] = model_saved_name
+	
 
 	# save model
 	# TODO: commented out for dev
