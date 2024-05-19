@@ -41,19 +41,19 @@ class LumbaKMeans:
         k = optimal_kmeans_n_clusters
 
         km_model = KMeans(n_clusters=k)
-        y_kmeans= km_model.fit_predict(X)
+        km_model.fit(X)
 
         # predicted cluster labels
-        kmeans_cluster_labels = y_kmeans.labels_
+        kmeans_cluster_labels = km_model.labels_
 
         # silhouette score
         silhouette = silhouette_score(X, kmeans_cluster_labels)
 
         self.model = km_model
-
+        print(km_model,)
         return {
             'model': km_model,
-            'labels_predicted': kmeans_cluster_labels,
+            # 'labels_predicted': (kmeans_cluster_labels),
             'silhouette_score': f'{silhouette:.4f}'
         }
 

@@ -40,7 +40,6 @@ class LumbaDBScan:
                 silhouette_avg = silhouette_score(X, dbscan.labels_)
             else:
                 silhouette_avg = -1  # Return a negative score if only one cluster is found
-            
             return silhouette_avg
         
                 # Perform hyperparameter optimization for DBSCAN
@@ -66,7 +65,7 @@ class LumbaDBScan:
 
         return {
             'model': optimal_dbscan,
-            'labels_predicted': dbscan_cluster_labels,
+            # 'labels_predicted': dbscan_cluster_labels,
             'silhouette_score': f'{silhouette:.4f}'
         }
 

@@ -81,16 +81,16 @@ async def asynctrain(df, training_record, model_metadata):
 	if model_metadata['method'] == 'CLUSTER':
 		if model_metadata['algorithm'] == 'KMEANS':
 			KM = LumbaKMeans(df)
-			response = KM.train_model(target_column_name=model_metadata['target'])
+			response = KM.train_model()
 			model_metadata["metrics"] = "silhouette_score"
 			model_metadata["score"] = response["silhouette_score"]
-			model_metadata["labels"] = response["labels_predicted"]
+			# model_metadata["labels"] = response["labels_predicted"]
 		if model_metadata['algorithm'] == 'DB_SCAN':
 			DB = LumbaDBScan(df)
-			response = DB.train_model(target_column_name=model_metadata['target'])
+			response = DB.train_model()
 			model_metadata["metrics"] = "silhouette_score"
 			model_metadata["score"] = response["silhouette_score"]
-			model_metadata["labels"] = response["labels_predicted"]
+			# model_metadata["labels"] = response["labels_predicted"]
 
 	# save model to pkl format
 	model_saved_name = f"{model_metadata['model_name']}.pkl"
