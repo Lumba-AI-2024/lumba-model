@@ -1,10 +1,10 @@
-import subprocess
+# import subprocess
 
-# Upgrade TensorFlow
-subprocess.run(["pip", "install", "--upgrade", "tensorflow"])
+# # Upgrade TensorFlow
+# subprocess.run(["pip", "install", "--upgrade", "tensorflow"])
 
-# Upgrade Keras
-subprocess.run(["pip", "install", "--upgrade", "keras"])
+# # Upgrade Keras
+# subprocess.run(["pip", "install", "--upgrade", "keras"])
 
 import tensorflow as tf
 import numpy as np
