@@ -66,7 +66,6 @@ class LumbaDBScan:
 
         return {
             'model': optimal_dbscan,
-            'labels_predicted': dbscan_cluster_labels,
             'silhouette_score': f'{silhouette:.4f}'
         }
 

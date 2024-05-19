@@ -53,7 +53,6 @@ class LumbaKMeans:
 
         return {
             'model': km_model,
-            'labels_predicted': kmeans_cluster_labels,
             'silhouette_score': f'{silhouette:.4f}'
         }
 
