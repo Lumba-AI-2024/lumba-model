@@ -19,21 +19,11 @@ from ml_model.models.db_scan import LumbaDBScan
 
 @shared_task
 def asynctrain(model_metadata):
-    # update training record to 'in progress'
-    # TODO: commented out for dev
     url = 'http://127.0.0.1:8000/modeling/'
 
     print(model_metadata)
 
-    minio_client = Minio("34.101.59.56:9000",
-                         access_key="zl6ggTd5WUAaV2NMaGJj",
-                         secret_key="mtUHWqwV2GlpW8eALQ0quZEWCHkZqQlbBAXKuXus",
-                         secure=False)
-
-    obj = minio_client.get_object('lumba-directory',
-                                  model_metadata['dataset_link'])
-
-    df = pandas.read_csv(obj)
+    df = pandas.read_csv(model_metadata['dataset_link'])
 
 
     requests.put(url,
