@@ -19,22 +19,11 @@ from ml_model.models.db_scan import LumbaDBScan
 
 @shared_task
 def asynctrain(model_metadata):
-    # update training record to 'in progress'
-    # TODO: commented out for dev
     url = 'http://127.0.0.1:8000/modeling/'
 
     print(model_metadata)
 
-    minio_client = Minio("34.101.59.56:9000",
-                         access_key="zl6ggTd5WUAaV2NMaGJj",
-                         secret_key="mtUHWqwV2GlpW8eALQ0quZEWCHkZqQlbBAXKuXus",
-                         secure=False)
-
-    obj = minio_client.get_object('lumba-directory',
-                                  model_metadata['dataset_link'])
-
-    df = pandas.read_csv(obj)
-
+    df = pandas.read_csv(model_metadata['dataset_link'])
 
     requests.put(url,
                  params={
@@ -48,61 +37,54 @@ def asynctrain(model_metadata):
     # print("training with record id " + current_task.id + " in progress")
 
     # train model
+    print("inii",model_metadata)
     if model_metadata['method'] == 'REGRESSION':
         if model_metadata['algorithm'] == 'LINEAR':
             LR = LumbaLinearRegression(df)
-            response = LR.train_model(train_column_name=model_metadata['feature'].split(','),
-                                      target_column_name=model_metadata['target'])
+            response = LR.train_model(target_column_name=model_metadata['target'])
             model_metadata["metrics"] = "r2_score"
             model_metadata["score"] = response["r2_score"]
         if model_metadata['algorithm'] == 'DECISION_TREE':
             DTR = LumbaDecisionTreeRegressor(df)
-            response = DTR.train_model(train_column_name=model_metadata['feature'].split(','),
-                                      target_column_name=model_metadata['target'])
+            print("masukk")
+            response = DTR.train_model(target_column_name=model_metadata['target'])
             model_metadata["metrics"] = "r2_score"
             model_metadata["score"] = response["r2_score"]
         if model_metadata['algorithm'] == 'RANDOM_FOREST':
             RFR = LumbaRandomForestRegressor(df)
-            response = RFR.train_model(train_column_name=model_metadata['feature'].split(','),
-                                      target_column_name=model_metadata['target'])
+            response = RFR.train_model(target_column_name=model_metadata['target'])
             model_metadata["metrics"] = "r2_score"
             model_metadata["score"] = response["r2_score"]
         if model_metadata['algorithm'] == 'NEURAL_NETWORK':
             NNR = LumbaNeuralNetworkRegression(df)
-            response = NNR.train_model(train_column_name=model_metadata['feature'].split(','),
-                                      target_column_name=model_metadata['target'])
+            response = NNR.train_model(target_column_name=model_metadata['target'])
             model_metadata["metrics"] = "r2_score"
             model_metadata["score"] = response["r2_score"]		
         if model_metadata['algorithm'] == 'XG_BOOST':
             XBR = LumbaXGBoostRegressor(df)
-            response = XBR.train_model(train_column_name=model_metadata['feature'].split(','),
-                                      target_column_name=model_metadata['target'])
+            response = XBR.train_model(target_column_name=model_metadata['target'])
             model_metadata["metrics"] = "r2_score"
             model_metadata["score"] = response["r2_score"]		
             
     if model_metadata['method'] == 'CLASSIFICATION':
         if model_metadata['algorithm'] == 'DECISION_TREE':
             DT = LumbaDecisionTreeClassifier(df)
-            response = DT.train_model(train_column_names=model_metadata['feature'].split(','),
-                                      target_column_name=model_metadata['target'])
+            response = DT.train_model(target_column_name=model_metadata['target'])
             model_metadata["metrics"] = "accuracy_score"
             model_metadata["score"] = response["accuracy_score"]
         if model_metadata['algorithm'] == 'NEURAL_NETWORK':
             NNC = LumbaNeuralNetworkClassification(df)
-            response = NNC.train_model(train_column_names=model_metadata['feature'].split(','),
-                                      target_column_name=model_metadata['target'])
+            response = NNC.train_model(target_column_name=model_metadata['target'])
             model_metadata["metrics"] = "accuracy_score"
             model_metadata["score"] = response["accuracy_score"]
         if model_metadata['algorithm'] == 'RANDOM_FOREST':
             RFC = LumbaDecisionTreeClassifier(df)
-            response = RFC.train_model(train_column_names=model_metadata['feature'].split(','),
-                                      target_column_name=model_metadata['target'])
+            response = RFC.train_model(target_column_name=model_metadata['target'])
             model_metadata["metrics"] = "accuracy_score"
             model_metadata["score"] = response["accuracy_score"]
         if model_metadata['algorithm'] == 'XG_BOOST':
             XGC = LumbaXGBoostClassifier(df)
-            response = XGC.train_model(train_column_names=model_metadata['feature'].split(','),
-                                      target_column_name=model_metadata['target'])
+            response = XGC.train_model(target_column_name=model_metadata['target'])
             model_metadata["metrics"] = "accuracy_score"
             model_metadata["score"] = response["accuracy_score"]
 
@@ -141,4 +123,5 @@ def asynctrain(model_metadata):
                  )
     # os.remove(model_saved_name)
     # print("training with record id " + current_task.id + " completed")
+    print(model_metadata)
     return model_metadata

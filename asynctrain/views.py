@@ -20,7 +20,13 @@ def async_train_endpoint(request):
     except:
         return JsonResponse({'message': "input error"}, status=400)
 
-    print(model_metadata)
+    # print(model_metadata)
 
-    asynctrain.delay(model_metadata)
-    return JsonResponse(model_metadata, status=200)
+    async_result  = asynctrain.delay(model_metadata)
+    # print(async_result)
+    response_data = {
+        'task_id': async_result.id,
+        'status': 'Processing'
+    }
+     
+    return JsonResponse(response_data, status=200)
