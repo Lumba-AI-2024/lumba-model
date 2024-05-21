@@ -19,7 +19,7 @@ class LumbaXGBoostClassifier:
         if X is None and y is None:
             X = self.dataframe.drop(columns=[target_column_name])
             y = self.dataframe[target_column_name]
-
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         # Define parameter grid
         param_grid = {
             'n_estimators': [50, 100, 150],
