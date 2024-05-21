@@ -78,7 +78,7 @@ def asynctrain(model_metadata):
             model_metadata["metrics"] = "accuracy_score"
             model_metadata["score"] = response["accuracy_score"]
         if model_metadata['algorithm'] == 'RANDOM_FOREST':
-            RFC = LumbaDecisionTreeClassifier(df)
+            RFC = LumbaRandomForestClassifier(df)
             response = RFC.train_model(target_column_name=model_metadata['target'])
             model_metadata["metrics"] = "accuracy_score"
             model_metadata["score"] = response["accuracy_score"]

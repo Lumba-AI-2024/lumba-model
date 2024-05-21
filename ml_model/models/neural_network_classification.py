@@ -14,7 +14,8 @@ from scikeras.wrappers import KerasClassifier
 from sklearn.model_selection import GridSearchCV,train_test_split, KFold
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
-from pandas.core.frame import DataFrame
+import pandas as pd
+from pandas import DataFrame, Series
 from tensorflow.keras.utils import to_categorical
 
 from typing import Any, Optional, Union, List
@@ -36,11 +37,11 @@ class LumbaNeuralNetworkClassification:
     def __init__(self, dataframe: DataFrame) -> None:
         self.dataframe = dataframe
     
-
-    def train_model(self, target_column_name: str) -> dict:
-
-        X = self.dataframe.drop(columns=[target_column_name])
-        y = self.dataframe[target_column_name]
+    def train_model(self, target_column_name: str, X: DataFrame = None, y: Series = None) -> dict:
+        
+        if X is None and y is None:
+            X = self.dataframe.drop(columns=[target_column_name])
+            y = self.dataframe[target_column_name]
         # Check the number of unique target values
         num_classes = len(np.unique(y))
 

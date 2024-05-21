@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 from pandas.core.frame import DataFrame
+from pandas import Series
 
 from typing import Any, Optional, Union, List
 
@@ -13,33 +14,11 @@ class LumbaXGBoostClassifier:
     def __init__(self, dataframe: DataFrame) -> None:
         self.dataframe = dataframe
 
-    def train_model(self, target_column_name: str) -> dict:
-        # if self.dataframe[target_column_name].dtype not in ["int64", "float64"]:
-        #     return {
-        #         'error': 'Kolom yang boleh dipilih hanyalah kolom dengan data numerik saja. Silakan pilih kolom yang benar.'
-        #     }
+    def train_model(self, target_column_name: str, X: DataFrame = None, y: Series = None) -> dict:
         
-        # x = None
-        # if type(train_column_name) == str:
-        #     if self.dataframe[train_column_name].dtype not in ["int64", "float64"]:
-        #         return {
-        #             'error': 'Kolom yang boleh dipilih hanyalah kolom dengan data numerik saja. Silakan pilih kolom yang benar.'
-        #         }
-        #     x = self.dataframe[train_column_name].to_numpy().reshape(-1, 1)
-        
-        # elif type(train_column_name) == list:
-        #     for col in train_column_name:
-        #         if self.dataframe[col].dtype not in ["int64", "float64"]:
-        #             return {
-        #                 'error': 'Kolom yang boleh dipilih hanyalah kolom dengan data numerik saja. Silakan pilih kolom yang benar.'
-        #             }
-
-        #     x = self.dataframe[train_column_name].to_numpy()
-
-        # y = self.dataframe[target_column_name].to_numpy().reshape(-1, 1)
-        X = self.dataframe.drop(columns=[target_column_name])
-        y = self.dataframe[target_column_name]
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        if X is None and y is None:
+            X = self.dataframe.drop(columns=[target_column_name])
+            y = self.dataframe[target_column_name]
 
         # Define parameter grid
         param_grid = {

@@ -3,7 +3,7 @@ from sklearn.model_selection import GridSearchCV,train_test_split, KFold
 from sklearn.metrics import accuracy_score
 
 from pandas.core.frame import DataFrame
-
+from pandas import Series
 from typing import Any, List, Optional
 
 class LumbaRandomForestClassifier:
@@ -12,17 +12,11 @@ class LumbaRandomForestClassifier:
     def __init__(self, dataframe: DataFrame) -> None:
         self.dataframe = dataframe
 
-    def train_model(self, target_column_name: str) -> dict:
+    def train_model(self, target_column_name: str, X: DataFrame = None, y: Series = None) -> dict:
         
-        # # check if the columns selected are valid for Decision Tree process
-        # for col in x.columns:
-        #     if y.dtype not in ["int64", "float64"] or x[col].dtype not in ["int64", "float64"]:
-        #         return {
-        #             'error': 'Kolom yang boleh dipilih hanyalah kolom dengan data numerik saja. Silakan pilih kolom yang benar atau gunakan encoding pada data categorical.'
-        #         }
-        
-        X = self.dataframe.drop(columns=[target_column_name])
-        y = self.dataframe[target_column_name]
+        if X is None and y is None:
+            X = self.dataframe.drop(columns=[target_column_name])
+            y = self.dataframe[target_column_name]
 
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
