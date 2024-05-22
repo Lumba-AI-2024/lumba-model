@@ -42,10 +42,10 @@ class LumbaDecisionTreeClassifier:
         y_pred = best_model.predict(X_test)
         acc = accuracy_score(y_true=y_test, y_pred=y_pred)
 
-        self.model = dt
+        self.model = best_model
 
         return {
-            'model': dt,
+            'model': best_model,
             'accuracy_score': f'{acc*100:.4f}'
         }
 

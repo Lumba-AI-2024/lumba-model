@@ -93,10 +93,10 @@ class LumbaNeuralNetworkClassification:
         acc = accuracy_score(y_true=y_test, y_pred=y_pred)
 
 
-        self.model = model
+        self.model = best_model
 
         return {
-            'model': model,
+            'model': best_model,
             'best_hyperparams': best_hyperparams,
             'accuracy_score': f'{acc*100:.4f}'
         }

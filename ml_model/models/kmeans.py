@@ -49,10 +49,10 @@ class LumbaKMeans:
         # silhouette score
         silhouette = silhouette_score(X, kmeans_cluster_labels)
 
-        self.model = km_model
+        self.model = y_kmeans
 
         return {
-            'model': km_model,
+            'model': y_kmeans,
             'silhouette_score': f'{silhouette:.4f}'
         }
 

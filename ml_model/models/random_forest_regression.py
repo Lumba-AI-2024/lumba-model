@@ -48,10 +48,10 @@ class LumbaRandomForestRegressor:
         mae = mean_absolute_error(y_true=y_test, y_pred=y_pred)
         mse = mean_squared_error(y_true=y_test, y_pred=y_pred)
 
-        self.model = rf
+        self.model = best_model
 
         return {
-            'model': rf,
+            'model': best_model,
             'best_hyperparams': best_hyperparams,
             'mean_absolute_error': f'{mae:.4f}',
             'mean_squared_error': f'{mse:.4f}',

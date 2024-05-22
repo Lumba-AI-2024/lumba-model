@@ -45,10 +45,10 @@ class LumbaXGBoostClassifier:
         y_pred = best_model.predict(X_test)
         acc = accuracy_score(y_true=y_test, y_pred=y_pred)
 
-        self.model = xg
+        self.model = best_model
 
         return {
-            'model': xg,
+            'model': best_model,
             'best_hyperparams': best_hyperparams,
             'accuracy_score': f'{acc*100:.4f}'
         }
