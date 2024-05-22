@@ -20,7 +20,7 @@ from tensorflow.keras.utils import to_categorical
 
 from typing import Any, Optional, Union, List
 
-def create_model(optimizer='adam', activation='relu', units1=64, units2=32, input_shape=(10,), num_classes=2):
+def create_model(optimizer='adam', activation='relu', units1=64, units2=32, input_shape=(10,), num_classes=1):
             model = Sequential([
                 Input(shape=input_shape),
                 Dense(units1, activation=activation),
@@ -37,20 +37,21 @@ class LumbaNeuralNetworkClassification:
     def __init__(self, dataframe: DataFrame) -> None:
         self.dataframe = dataframe
     
-    def train_model(self, target_column_name: str, X: DataFrame = None, y: Series = None) -> dict:
+    def train_model(self, target_column_name: str) -> dict:
         
-        if X is None and y is None:
-            X = self.dataframe.drop(columns=[target_column_name])
-            y = self.dataframe[target_column_name]
+        X = self.dataframe.drop(columns=[target_column_name])
+        y = self.dataframe[target_column_name]
         # Check the number of unique target values
         num_classes = len(np.unique(y))
 
         # One-hot encode the target if there are more than 2 classes
+        units3 = num_classes if num_classes > 2 else 1
         if num_classes > 2:
             y = to_categorical(y, num_classes)
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
         # Set seed for NumPy
+        
         np.random.seed(42)
 
         # Set seed for TensorFlow
@@ -66,7 +67,7 @@ class LumbaNeuralNetworkClassification:
             units1=64, 
             units2=32, 
             input_shape=input_shape, 
-            num_classes=num_classes, 
+            num_classes=units3, 
             verbose=0
         )
 
