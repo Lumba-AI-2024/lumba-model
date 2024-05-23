@@ -17,6 +17,10 @@ from ml_model.models.db_scan import LumbaDBScan
 import requests
 import joblib
 import shap
+from io import BytesIO
+import matplotlib.pyplot as plt
+import base64
+
 
 def calculate_shap_values(best_model, X_test):
 		explainer = shap.TreeExplainer(best_model)
@@ -25,7 +29,17 @@ def calculate_shap_values(best_model, X_test):
 		# Convert SHAP values to a format that can be returned as JSON
 		shap_values_json = [shap_values[i].tolist() for i in range(len(shap_values))]
 		
-		return shap_values_json
+		# Generate SHAP force plot
+		plt.figure()
+		shap.summary_plot(shap_values, X_test,plot_type="bar",show=False)
+		buf = BytesIO()
+		plt.savefig(buf, format='png')
+		buf.seek(0)
+		img_str = base64.b64encode(buf.read()).decode('utf-8')
+		plt.close()
+	
+
+		return img_str
 
 async def asynctrain(df, training_record, model_metadata):
 	# update training record to 'in progress'
