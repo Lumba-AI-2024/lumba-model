@@ -2,6 +2,7 @@
 
 from sklearn.cluster import DBSCAN
 from sklearn.metrics import silhouette_score
+from sklearn.decomposition import PCA
 import optuna
 
 from pandas.core.frame import DataFrame
@@ -16,7 +17,9 @@ class LumbaDBScan:
 
     def train_model(self) -> dict:
         X = self.dataframe
-
+        
+        pca = PCA(n_components=2)
+        X = pca.fit_transform(X)
         # # check if the columns selected are valid for K-Means process
         # for col in x.columns:
         #     if x[col].dtype not in ["int64", "float64"]:
@@ -66,6 +69,7 @@ class LumbaDBScan:
 
         return {
             'model': optimal_dbscan,
+            'cluster_labels': dbscan_cluster_labels,
             'silhouette_score': f'{silhouette:.4f}'
         }
 
