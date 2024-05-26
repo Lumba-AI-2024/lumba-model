@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import base64
 from celery import shared_task
 from minio import Minio
+import json
+
 
 from ml_model.models.linear_regression import LumbaLinearRegression
 from ml_model.models.decision_tree_classification import LumbaDecisionTreeClassifier
@@ -174,6 +176,7 @@ def asynctrain(model_metadata):
     # save model to pkl format
     model_saved_name = f"{model_metadata['modelname']}.pkl"
     joblib.dump(response['model'], model_saved_name)
+    model_metadata["score"] = json.dumps(model_metadata["score"])
     print(model_saved_name)
     requests.put(url,
                  params={
