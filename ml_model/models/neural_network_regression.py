@@ -8,6 +8,7 @@ from scikeras.wrappers import KerasRegressor
 from sklearn.model_selection import GridSearchCV,train_test_split, KFold
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, r2_score, mean_squared_error
+import pandas as pd
 
 from pandas.core.frame import DataFrame
 

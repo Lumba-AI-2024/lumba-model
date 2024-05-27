@@ -1,6 +1,7 @@
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import GridSearchCV,train_test_split, KFold
 from sklearn.metrics import accuracy_score
+import pandas as pd
 
 import pandas as pd
 from pandas import DataFrame, Series

@@ -1,9 +1,9 @@
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.model_selection import GridSearchCV,train_test_split, KFold
 from sklearn.metrics import mean_squared_error, r2_score, mean_absolute_error
+import pandas as pd
 
 from pandas.core.frame import DataFrame
-
 from typing import Any, List, Optional
 
 class LumbaDecisionTreeRegressor:

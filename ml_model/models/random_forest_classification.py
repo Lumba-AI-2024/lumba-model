@@ -1,6 +1,7 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV,train_test_split, KFold
 from sklearn.metrics import accuracy_score
+import pandas as pd
 
 from pandas.core.frame import DataFrame
 from pandas import Series
