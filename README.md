@@ -35,6 +35,16 @@ The Flower WebUI should be accessible via http://localhost:5555 (default port). 
 uvicorn --reload modeling.asgi:application --port 7000
 ```
 
+## Django-RQ Integration
+1. Build the image
+    ```shell
+    docker build . -t lumba-model-worker -f .\worker.Dockerfile
+    ```
+2. Run the image
+    ```shell
+   docker run -d --name lumba-worker --env-file=.env  lumba-model-worker    
+   ```
+
 # ML Models
 Lumba.ai provides several Machine Learning models that can be used by user depends on their needs.
 ## 1. Linear Regression
