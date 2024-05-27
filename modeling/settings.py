@@ -13,10 +13,12 @@ import os
 from pathlib import Path
 
 from decouple import config
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -40,8 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'django_celery_beat',
-    'django_celery_results',
+    'django_rq',
 
     # project apps
     'asynctrain',
@@ -133,17 +134,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Celery config
+# Django RQ Configs
 
-CELERY_RESULT_BACKEND = "django-db"
+RQ_QUEUES = {
+    "default": {
+        "HOST": "34.101.59.56",
+        "PORT": 6379,
+        "DB": 5,
+        # 'REDIS_CLIENT_KWARGS': {    # Eventual additional Redis connection arguments
+        #             'ssl_cert_reqs': None,
+        #         },
+    },
+}
 
-# This configures Redis as the datastore between Django + Celery
-CELERY_BROKER_URL = config('CELERY_BROKER_REDIS_URL', default='redis://:@34.101.59.56:6379')
-# if you out to use os.environ the config is:
-# CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_REDIS_URL', 'redis://localhost:6379')
+RQ = {
+    'DEFAULT_RESULT_TTL': 86400,
+}
 
-
-# this allows you to schedule items in the Django admin.
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers.DatabaseScheduler'
-
-CELERY_TASK_SERIALIZER = 'json'
+BACKEND_API_URL = os.getenv('BACKEND_API_URL')

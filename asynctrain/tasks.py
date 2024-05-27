@@ -1,3 +1,5 @@
+import os
+
 import joblib
 import pandas
 import requests
@@ -5,8 +7,7 @@ import shap
 from io import BytesIO
 import matplotlib.pyplot as plt
 import base64
-from celery import shared_task
-from minio import Minio
+from django_rq import job
 import json
 
 
@@ -21,6 +22,8 @@ from ml_model.models.neural_network_regression import LumbaNeuralNetworkRegressi
 from ml_model.models.neural_network_classification import LumbaNeuralNetworkClassification
 from ml_model.models.kmeans import LumbaKMeans
 from ml_model.models.db_scan import LumbaDBScan
+from modeling.settings import BACKEND_API_URL
+
 
 # def calculate_shap_values(best_model, X_test, model_type):
 #     if model_type == "classification":
@@ -46,9 +49,9 @@ from ml_model.models.db_scan import LumbaDBScan
 
 #     return img_str
 
-@shared_task
+@job('default', timeout=86400)
 def asynctrain(model_metadata):
-    url = 'http://127.0.0.1:8000/modeling/'
+    url = BACKEND_API_URL + '/modeling/'
 
     print(model_metadata)
 
@@ -193,7 +196,7 @@ def asynctrain(model_metadata):
                      'model_file': open(model_saved_name, 'rb')
                  }
                  )
-    # os.remove(model_saved_name)
+    os.remove(model_saved_name)
     # print("training with record id " + current_task.id + " completed")
     print(model_metadata)
     model_metadata.pop('model', None)

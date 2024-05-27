@@ -19,4 +19,5 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('train/', include('asynctrain.urls')),
+    path("django-rq/", include("django_rq.urls")),
 ]
