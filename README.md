@@ -36,13 +36,22 @@ uvicorn --reload modeling.asgi:application --port 7000
 ```
 
 ## Django-RQ Integration
-1. Build the image
+1. Create a `.env` file in projec root with the following content
+   ```
+   BACKEND_API_URL=http://host.docker.internal:8000
+   ```
+   This is so that any service on localhost is discoverable by the container.
+2. Build the image
     ```shell
     docker build . -t lumba-model-worker -f .\worker.Dockerfile
     ```
-2. Run the image
+3. Run the image
     ```shell
    docker run -d --name lumba-worker --env-file=.env  lumba-model-worker    
+   ```
+   You can run multiple image either by creating more container with different name or rebuilding the image with the entrypoint:
+   ```shell
+   python3 manage.py rqworker-pool --num-workers 3
    ```
 
 # ML Models
