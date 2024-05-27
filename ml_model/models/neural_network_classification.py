@@ -20,11 +20,12 @@ from tensorflow.keras.utils import to_categorical
 
 from typing import Any, Optional, Union, List
 
-def create_model(optimizer='adam', activation='relu', units1=64, units2=32, input_shape=(10,), num_classes=1):
+def create_model(optimizer='adam', activation='relu', units1=30, units2=20, units3=10, input_shape=(10,), num_classes=1):
             model = Sequential([
                 Input(shape=input_shape),
                 Dense(units1, activation=activation),
                 Dense(units2, activation=activation),
+                Dense(units3, activation=activation),
                 Dense(num_classes, activation='softmax' if num_classes > 2 else 'sigmoid')
             ])
             loss = 'categorical_crossentropy' if num_classes > 2 else 'binary_crossentropy'
@@ -45,7 +46,7 @@ class LumbaNeuralNetworkClassification:
         num_classes = len(np.unique(y))
 
         # One-hot encode the target if there are more than 2 classes
-        units3 = num_classes if num_classes > 2 else 1
+        units4 = num_classes if num_classes > 2 else 1
         if num_classes > 2:
             y = to_categorical(y, num_classes)
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -57,27 +58,29 @@ class LumbaNeuralNetworkClassification:
         # Set seed for TensorFlow
         tf.random.set_seed(42)
         
-        input_shape = (X.shape[1],)
+        input_shape = (X_train.shape[1],)
 
         # Wrap the Keras model in a KerasClassifier
         model = KerasClassifier(
             model=create_model, 
             optimizer='adam', 
             activation='relu', 
-            units1=64, 
-            units2=32, 
+            units1=30, 
+            units2=20,
+            units3=10,    
             input_shape=input_shape, 
-            num_classes=units3, 
+            num_classes=units4, 
             verbose=0
         )
 
         # Define the grid search parameters
         param_grid = {
-            'model__optimizer': ['adam', 'rmsprop'],
-            'model__activation': ['relu', 'softmax', 'sigmoid'],
-            'model__units1': [32, 64, 128],
-            'model__units2': [16, 32, 64],
-            'epochs': [10, 20, 30]  # Adjust the values as needed
+            'model__optimizer': ['adam'],
+            'model__activation': ['relu'],
+            'model__units1': [30, 20],
+            'model__units2': [20],
+            'model__units3': [10],
+            'epochs': [30, 40, 50]  # Adjust the values as needed
         }
 
         outer_cv = KFold(n_splits=3, shuffle=True, random_state=42)

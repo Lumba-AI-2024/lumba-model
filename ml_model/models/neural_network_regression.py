@@ -12,7 +12,7 @@ from sklearn.metrics import mean_absolute_error, r2_score, mean_squared_error
 from pandas.core.frame import DataFrame
 
 from typing import Any, Optional, Union, List
-def create_model(optimizer='adam', activation='relu', units1=64, units2=32, input_shape=(10,)):
+def create_model(optimizer='adam', activation='relu', units1=30, units2=20, input_shape=(10,)):
             model = Sequential([
                 Input(shape=input_shape),
                 Dense(units1, activation=activation),
@@ -64,15 +64,16 @@ class LumbaNeuralNetworkRegression:
         tf.random.set_seed(42)
         
         # Define a function to create model
-        input_shape = (X.shape[1],)
+        input_shape = (X_train.shape[1],)
 
         # Wrap the Keras model in a KerasClassifier
         kr = KerasRegressor(
             model=create_model, 
             optimizer='adam', 
             activation='relu', 
-            units1=64, 
-            units2=32, 
+            units1=30, 
+            units2=20,
+            units3=10,  
             input_shape=input_shape, 
             verbose=0
         )
@@ -80,11 +81,12 @@ class LumbaNeuralNetworkRegression:
 
         # Define the grid search parameters
         param_grid = {
-            'optimizer': ['adam', 'rmsprop'],
-            'activation': ['relu', 'sigmoid'],
-            'units1': [32, 64, 128],
-            'units2': [16, 32, 64],
-            'epochs': [10, 20, 30, 40,50]  # Adjust the values as needed
+            'optimizer': ['adam'],
+            'activation': ['relu'],
+            'units1': [30,20],
+            'units2': [20],
+            'units2': [10],
+            'epochs': [30, 40,50]  # Adjust the values as needed
         }
 
         outer_cv = KFold(n_splits=3, shuffle=True, random_state=42)
