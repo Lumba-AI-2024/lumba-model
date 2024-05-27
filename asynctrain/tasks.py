@@ -25,29 +25,46 @@ from ml_model.models.db_scan import LumbaDBScan
 from modeling.settings import BACKEND_API_URL
 
 
-# def calculate_shap_values(best_model, X_test, model_type):
-#     if model_type == "classification":
-#         explainer = shap.Explainer(best_model)
-#         shap_values = explainer.shap_values(X_test)
-#     elif model_type == "regression" or model_type == "xgboost":
-#         explainer = shap.Explainer(best_model, X_test)
-#         shap_values = explainer.shap_values(X_test)
-#     # elif model_type == "neural_network":
-#     #     explainer = shap.KernelExplainer(best_model.predict, X_test)
-#     #     shap_values = explainer.shap_values(X_test)
-#     else:
-#         raise ValueError("Unsupported model type")
 
-#     # Generate SHAP summary plot
-#     plt.figure()
-#     shap.summary_plot(shap_values, X_test, plot_type="bar", show=False)
-#     buf = BytesIO()
-#     plt.savefig(buf, format='png')
-#     buf.seek(0)
-#     img_str = base64.b64encode(buf.read()).decode('utf-8')
-#     plt.close()
+def calculate_shap_values(best_model, X, model_type, X_train=None, X_test=None):
+    def f(X):
+        return best_model.predict(X_train).flatten()
 
-#     return img_str
+    if model_type == "classification":
+        explainer = shap.Explainer(best_model)
+        shap_values = explainer.shap_values(X_test)
+    elif model_type == "regression" or model_type == "xgboost":
+        explainer = shap.Explainer(best_model, X_train)
+        shap_values = explainer.shap_values(X_test)
+    elif model_type == "neural_network":
+        # Summarize the background data using shap.sample
+        background = shap.kmeans(X_train, 50)  # Sample 100 instances for background
+
+        # Create a SHAP explainer using the summarized background
+        explainer = shap.KernelExplainer(f, background)
+
+        # Compute SHAP values for the test set
+        
+        shap_values = explainer.shap_values(X_test.iloc[:50, :], nsamples=500)
+    else:
+        raise ValueError("Unsupported model type")
+
+    # Generate SHAP summary plot
+    plt.figure()
+    if model_type == "classification":
+        shap.summary_plot(shap_values, X_test, plot_type="bar", show=False)
+    elif model_type == "neural_network":
+        shap.summary_plot(shap_values, X_test.iloc[:50, :], plot_type="bar", show=False)
+    else:
+        shap.summary_plot(shap_values, X_test, show=False)
+        
+    buf = BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    img_str = base64.b64encode(buf.read()).decode('utf-8')
+    plt.close()
+
+    return img_str
 
 @job('default', timeout=86400)
 def asynctrain(model_metadata):
@@ -173,9 +190,9 @@ def asynctrain(model_metadata):
             model_metadata["score"] = response["silhouette_score"]
             model_metadata["labels"] = response["labels_predicted"]
 
-    # if model_metadata['method'] == 'CLASSIFICATION' or model_metadata['method'] == 'REGRESSION' :
-    #    shap_values = calculate_shap_values(model_metadata["model"], df.drop(columns=[model_metadata['target']]), model_type)
-    #    model_metadata['shap_values'] = shap_values
+    if model_metadata['method'] == 'CLASSIFICATION' or model_metadata['method'] == 'REGRESSION' :
+       shap_values = calculate_shap_values(model_metadata["model"], df.drop(columns=[model_metadata['target']]), model_type, X_train=response["X_train"], X_test=response["X_test"])
+       model_metadata['shap_values'] = shap_values
     # save model to pkl format
     model_saved_name = f"{model_metadata['modelname']}.pkl"
     joblib.dump(response['model'], model_saved_name)

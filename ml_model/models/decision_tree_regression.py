@@ -49,8 +49,13 @@ class LumbaDecisionTreeRegressor:
 
         self.model = best_model
 
+        X_test_df = pd.DataFrame(X_test, columns=self.dataframe.drop(columns=[target_column_name]).columns)
+        X_train_df = pd.DataFrame(X_train, columns=self.dataframe.drop(columns=[target_column_name]).columns)
+        
         return {
             'model': best_model,
+            'X_train': X_train_df,
+            'X_test': X_test_df,
             'best_hyperparams': best_hyperparams,
             'mean_absolute_error': f'{mae:.4f}',
             'mean_squared_error': f'{mse:.4f}',
