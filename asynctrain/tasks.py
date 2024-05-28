@@ -27,9 +27,6 @@ from modeling.settings import BACKEND_API_URL
 
 
 def calculate_shap_values(best_model, X, model_type, X_train=None, X_test=None):
-    def f(X):
-        return best_model.predict(X_train).flatten()
-
     if model_type == "classification":
         explainer = shap.Explainer(best_model)
         shap_values = explainer.shap_values(X_test)
@@ -38,10 +35,10 @@ def calculate_shap_values(best_model, X, model_type, X_train=None, X_test=None):
         shap_values = explainer.shap_values(X_test)
     elif model_type == "neural_network":
         # Summarize the background data using shap.sample
-        background = shap.kmeans(X_train, 50)  # Sample 100 instances for background
+        background = shap.sample(X_train, 50)
 
         # Create a SHAP explainer using the summarized background
-        explainer = shap.KernelExplainer(f, background)
+        explainer = shap.KernelExplainer(best_model.predict, background)  # Use the first 50 instances as the background
 
         # Compute SHAP values for the test set
         

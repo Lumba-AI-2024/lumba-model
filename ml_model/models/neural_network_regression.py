@@ -83,11 +83,11 @@ class LumbaNeuralNetworkRegression:
 
         # Define the grid search parameters
         param_grid = {
-            'optimizer': ['adam'],
-            'activation': ['relu'],
-            'units1': [30,20],
-            'units2': [20],
-            'units3': [10],
+            'model__optimizer': ['adam'],
+            'model__activation': ['relu'],
+            'model__units1': [30,20],
+            'model__units2': [20],
+            'model__units3': [10],
             'epochs': [30, 40,50]  # Adjust the values as needed
         }
 
