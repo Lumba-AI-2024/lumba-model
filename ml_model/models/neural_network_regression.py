@@ -13,11 +13,12 @@ import pandas as pd
 from pandas.core.frame import DataFrame
 
 from typing import Any, Optional, Union, List
-def create_model(optimizer='adam', activation='relu', units1=30, units2=20, input_shape=(10,)):
+def create_model(optimizer='adam', activation='relu', units1=30, units2=20, units3=10,input_shape=(10,)):
             model = Sequential([
                 Input(shape=input_shape),
                 Dense(units1, activation=activation),
                 Dense(units2, activation=activation),
+                Dense(units3,activation=activation),
                 Dense(1)
             ])
             model.compile(optimizer=optimizer, loss='mean_squared_error', metrics=['mae'])
@@ -86,7 +87,7 @@ class LumbaNeuralNetworkRegression:
             'activation': ['relu'],
             'units1': [30,20],
             'units2': [20],
-            'units2': [10],
+            'units3': [10],
             'epochs': [30, 40,50]  # Adjust the values as needed
         }
 
