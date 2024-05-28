@@ -119,7 +119,7 @@ def asynctrain(model_metadata):
                 "mse": response["mean_squared_error"]
             }
             model_metadata["model"] = response["model"]
-            model_type = "regression"
+            model_type = "classification"
         if model_metadata['algorithm'] == 'NEURAL_NETWORK':
             NNR = LumbaNeuralNetworkRegression(df)
             response = NNR.train_model(target_column_name=model_metadata['target'])
