@@ -27,7 +27,7 @@ from modeling.settings import BACKEND_API_URL
 
 
 def calculate_shap_values(best_model, X, model_type, X_train=None, X_test=None):
-    if model_type == "classification":
+    if model_type == "classification" or model_type == "rf":
         explainer = shap.Explainer(best_model)
         shap_values = explainer.shap_values(X_test)
     elif model_type == "regression" or model_type == "xgboost":
@@ -48,12 +48,10 @@ def calculate_shap_values(best_model, X, model_type, X_train=None, X_test=None):
 
     # Generate SHAP summary plot
     plt.figure()
-    if model_type == "classification":
-        shap.summary_plot(shap_values, X_test, plot_type="bar", show=False)
-    elif model_type == "neural_network":
-        shap.summary_plot(shap_values, X_test.iloc[:50, :], plot_type="bar", show=False)
-    else:
+    if model_type != "neurak_network":
         shap.summary_plot(shap_values, X_test, show=False)
+    else:
+        shap.summary_plot(shap_values, X_test.iloc[:50, :], show=False)
         
     buf = BytesIO()
     plt.savefig(buf, format='png')
@@ -70,6 +68,8 @@ def asynctrain(model_metadata):
     print(model_metadata)
 
     df = pandas.read_csv(model_metadata['dataset_link'])
+    print(df.head())
+    df = df.drop(columns = ['Unnamed: 0'])
 
     requests.put(url,
                  params={
@@ -119,7 +119,7 @@ def asynctrain(model_metadata):
                 "mse": response["mean_squared_error"]
             }
             model_metadata["model"] = response["model"]
-            model_type = "classification"
+            model_type = "rf"
         if model_metadata['algorithm'] == 'NEURAL_NETWORK':
             NNR = LumbaNeuralNetworkRegression(df)
             response = NNR.train_model(target_column_name=model_metadata['target'])
@@ -173,24 +173,27 @@ def asynctrain(model_metadata):
             model_metadata["model"] = response["model"]
             model_type == "xgboost"
 
-    if model_metadata['method'] == 'CLUSTER':
+    if model_metadata['method'] == 'CLUSTERING':
         if model_metadata['algorithm'] == 'KMEANS':
             KM = LumbaKMeans(df)
-            response = KM.train_model(train_column_names=model_metadata['feature'].split(','))
+            response = KM.train_model()
             model_metadata["metrics"] = "silhouette_score"
             model_metadata["score"] = response["silhouette_score"]
-            model_metadata["labels"] = response["labels_predicted"]
-        if model_metadata['algorithm'] == 'DB_SCAN':
+            model_metadata["labels"] = response["cluster_labels"]
+            model_metadata["model"] = response["model"]
+        if model_metadata['algorithm'] == 'DBSCAN':
             DB = LumbaDBScan(df)
-            response = DB.train_model(train_column_names=model_metadata['feature'].split(','))
+            response = DB.train_model()
             model_metadata["metrics"] = "silhouette_score"
             model_metadata["score"] = response["silhouette_score"]
-            model_metadata["labels"] = response["labels_predicted"]
+            model_metadata["labels"] = response["cluster_labels"]
+            model_metadata["model"] = response["model"]
 
     if model_metadata['method'] == 'CLASSIFICATION' or model_metadata['method'] == 'REGRESSION' :
        shap_values = calculate_shap_values(model_metadata["model"], df.drop(columns=[model_metadata['target']]), model_type, X_train=response["X_train"], X_test=response["X_test"])
        model_metadata['shap_values'] = shap_values
     # save model to pkl format
+    print(response)
     model_saved_name = f"{model_metadata['modelname']}.pkl"
     joblib.dump(response['model'], model_saved_name)
     model_metadata["score"] = json.dumps(model_metadata["score"])
