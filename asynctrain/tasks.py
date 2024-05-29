@@ -129,7 +129,7 @@ def asynctrain(model_metadata):
                 "mae": response["mean_absolute_error"],
                 "mse": response["mean_squared_error"]
             }
-            model_metadata["model"] = response["model"]	
+            model_metadata["model"] = response["model"]
             model_type = "neural_network"
         if model_metadata['algorithm'] == 'XG_BOOST':
             XBR = LumbaXGBoostRegressor(df)
@@ -140,9 +140,9 @@ def asynctrain(model_metadata):
                 "mae": response["mean_absolute_error"],
                 "mse": response["mean_squared_error"]
             }
-            model_metadata["model"] = response["model"]	
+            model_metadata["model"] = response["model"]
             model_type == "xgboost"
-            
+
     if model_metadata['method'] == 'CLASSIFICATION':
         if model_metadata['algorithm'] == 'DECISION_TREE':
             DT = LumbaDecisionTreeClassifier(df)
@@ -187,13 +187,15 @@ def asynctrain(model_metadata):
             model_metadata["score"] = response["silhouette_score"]
             model_metadata["labels"] = response["labels_predicted"]
 
-    if model_metadata['method'] == 'CLASSIFICATION' or model_metadata['method'] == 'REGRESSION' :
-       shap_values = calculate_shap_values(model_metadata["model"], df.drop(columns=[model_metadata['target']]), model_type, X_train=response["X_train"], X_test=response["X_test"])
-       model_metadata['shap_values'] = shap_values
-    # save model to pkl format
     model_saved_name = f"{model_metadata['modelname']}.pkl"
     joblib.dump(response['model'], model_saved_name)
     model_metadata["score"] = json.dumps(model_metadata["score"])
+    print(model_metadata["score"])
+
+    if model_metadata['method'] == 'CLASSIFICATION' or model_metadata['method'] == 'REGRESSION' :
+        shap_values = calculate_shap_values(model_metadata["model"], df.drop(columns=[model_metadata['target']]), model_type, X_train=response["X_train"], X_test=response["X_test"])
+        model_metadata['shap_values'] = shap_values
+    # save model to pkl format
     print(model_saved_name)
     requests.put(url,
                  params={
@@ -210,7 +212,7 @@ def asynctrain(model_metadata):
                      'model_file': open(model_saved_name, 'rb')
                  }
                  )
-    os.remove(model_saved_name)
+    # os.remove(model_saved_name)
     # print("training with record id " + current_task.id + " completed")
     print(model_metadata)
     model_metadata.pop('model', None)

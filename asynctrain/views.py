@@ -1,3 +1,4 @@
+import django_rq
 from django.http import JsonResponse
 
 from asynctrain.tasks import asynctrain
@@ -14,13 +15,12 @@ def async_train_endpoint(request):
     except:
         return JsonResponse({'message': "input error"}, status=400)
 
-    # print(model_metadata)
+    if (model_metadata['algorithm'] == 'XG_BOOST') :
+        queue = django_rq.get_queue('xgboost')
+        queue.enqueue(asynctrain, model_metadata)
+    else:
+        async_result = asynctrain.delay(model_metadata)
 
-    async_result = asynctrain.delay(model_metadata)
-    {
-        'task': 'asyntrain',
-        'parameter': model_metadata
-     }
     # print(async_result)
     response_data = {
         'task_id': async_result.id,

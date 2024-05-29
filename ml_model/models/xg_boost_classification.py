@@ -30,7 +30,7 @@ class LumbaXGBoostClassifier:
             'base_score':[0.25,0.5,0.75,1]
         }
 
-        xg = XGBClassifier(random_state=42, verbosity=0, silent=True)
+        xg = XGBClassifier(random_state=42)
 
         outer_cv = KFold(n_splits=5, shuffle=True, random_state=42)
 
