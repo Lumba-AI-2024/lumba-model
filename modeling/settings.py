@@ -138,13 +138,23 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 RQ_QUEUES = {
     "default": {
-        "HOST": "34.101.59.56",
+        "HOST": "35.219.69.208",
         "PORT": 6379,
-        "DB": 5,
-        # 'REDIS_CLIENT_KWARGS': {    # Eventual additional Redis connection arguments
-        #             'ssl_cert_reqs': None,
-        #         },
+        "DB": 0,
+        "SSL_CERT_REQS": None,
+        'REDIS_CLIENT_KWARGS': {    # Eventual additional Redis connection arguments
+            'health_check_interval': 30,
+        },
     },
+    "xgboost": {
+        "HOST": "35.219.69.208",
+        "PORT": 6379,
+        "DB": 4,
+        "SSL_CERT_REQS": None,
+        'REDIS_CLIENT_KWARGS': {    # Eventual additional Redis connection arguments
+            'health_check_interval': 30,
+        },
+    }
 }
 
 RQ = {
