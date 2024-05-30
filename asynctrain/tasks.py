@@ -148,29 +148,48 @@ def asynctrain(model_metadata):
             DT = LumbaDecisionTreeClassifier(df)
             response = DT.train_model(target_column_name=model_metadata['target'])
             model_metadata["metrics"] = "accuracy_score"
-            model_metadata["score"] = response["accuracy_score"]
+            model_metadata["score"] = {
+                "accuracy_score": response["accuracy_score"],
+                "recall_score": response["recall_score"],
+                "precision_score": response["precision_score"],
+                "f1_score": response["f1_score"]
+            }
             model_metadata["model"] = response["model"]
             model_type = "classification"
         if model_metadata['algorithm'] == 'NEURAL_NETWORK':
             NNC = LumbaNeuralNetworkClassification(df)
             response = NNC.train_model(target_column_name=model_metadata['target'])
             model_metadata["metrics"] = "accuracy_score"
-            model_metadata["score"] = response["accuracy_score"]
+            model_metadata["score"] = {
+                "accuracy_score": response["accuracy_score"],
+                "recall_score": response["recall_score"],
+                "precision_score": response["precision_score"],
+                "f1_score": response["f1_score"]
+            }
             model_metadata["model"] = response["model"]
             model_type = "neural_network"
         if model_metadata['algorithm'] == 'RANDOM_FOREST':
             RFC = LumbaRandomForestClassifier(df)
             response = RFC.train_model(target_column_name=model_metadata['target'])
             model_metadata["metrics"] = "accuracy_score"
-            model_metadata["score"] = response["accuracy_score"]
+            model_metadata["score"] = {
+                "accuracy_score": response["accuracy_score"],
+                "recall_score": response["recall_score"],
+                "precision_score": response["precision_score"],
+                "f1_score": response["f1_score"]
+            }
             model_metadata["model"] = response["model"]
             model_type = "classification"
         if model_metadata['algorithm'] == 'XG_BOOST':
             XGC = LumbaXGBoostClassifier(df)
             response = XGC.train_model(target_column_name=model_metadata['target'])
             model_metadata["metrics"] = "accuracy_score"
-            model_metadata["score"] = response["accuracy_score"]
-            model_metadata["model"] = response["model"]
+            model_metadata["score"] = {
+                "accuracy_score": response["accuracy_score"],
+                "recall_score": response["recall_score"],
+                "precision_score": response["precision_score"],
+                "f1_score": response["f1_score"]
+            }
             model_type == "xgboost"
 
     if model_metadata['method'] == 'CLUSTERING':
@@ -180,15 +199,16 @@ def asynctrain(model_metadata):
             response = KM.train_model()
             model_metadata["metrics"] = "silhouette_score"
             model_metadata["score"] = response["silhouette_score"]
-            model_metadata["labels"] = response["cluster_labels"]
             model_metadata["model"] = response["model"]
+            model_metadata["shap_model"] = response["shap_model"]
         if model_metadata['algorithm'] == 'DBSCAN':
             DB = LumbaDBScan(df)
             response = DB.train_model()
             model_metadata["metrics"] = "silhouette_score"
             model_metadata["score"] = response["silhouette_score"]
-            model_metadata["labels"] = response["cluster_labels"]
             model_metadata["model"] = response["model"]
+            model_metadata["shap_model"] = response["shap_model"]
+
 
     model_saved_name = f"{model_metadata['modelname']}.pkl"
     joblib.dump(response['model'], model_saved_name)

@@ -74,7 +74,7 @@ class LumbaDBScan:
 
         return {
             'model': optimal_dbscan,
-            'shap_model': shap_model
+            'shap_model': shap_model,
             'silhouette_score': f'{silhouette:.4f}'
         }
 

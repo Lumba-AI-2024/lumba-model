@@ -14,4 +14,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy local code to the container image.
 COPY . .
 
-CMD exec python3 manage.py rqworker
+CMD exec python3 manage.py rqworker-pool --num-workers 3
