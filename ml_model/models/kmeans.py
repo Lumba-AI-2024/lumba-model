@@ -9,6 +9,8 @@ import optuna
 from pandas.core.frame import DataFrame
 
 from typing import Any, Optional, List
+from sklearn.ensemble import RandomForestClassifier
+
 
 class LumbaKMeans:
     model: KMeans
@@ -45,19 +47,22 @@ class LumbaKMeans:
         k = optimal_kmeans_n_clusters
 
         km_model = KMeans(n_clusters=k, random_state=42, init='k-means++')
-        y_kmeans= km_model.fit_predict(X)
+        km_model.fit_predict(X)
 
         # predicted cluster labels
-        kmeans_cluster_labels = y_kmeans.labels_
+        kmeans_cluster_labels = km_model.labels_
 
         # silhouette score
         silhouette = silhouette_score(X, kmeans_cluster_labels)
 
-        self.model = y_kmeans
+        self.model = km_model
+        
+        shap_model=RandomForestClassifier()
+        shap_model.fit(self.dataframe,kmeans_cluster_labels)
 
         return {
-            'model': y_kmeans,
-            'cluster_labels': kmeans_cluster_labels,
+            'model': km_model,
+            'shap_model': shap_model,
             'silhouette_score': f'{silhouette:.4f}'
         }
 
