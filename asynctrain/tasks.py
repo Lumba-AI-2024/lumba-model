@@ -48,7 +48,7 @@ def calculate_shap_values(best_model, X, model_type, X_train=None, X_test=None):
 
     # Generate SHAP summary plot
     plt.figure()
-    if model_type != "neurak_network":
+    if model_type != "neural_network":
         shap.summary_plot(shap_values, X_test, show=False)
     else:
         shap.summary_plot(shap_values, X_test.iloc[:50, :], show=False)
@@ -174,6 +174,7 @@ def asynctrain(model_metadata):
             model_type == "xgboost"
 
     if model_metadata['method'] == 'CLUSTERING':
+        model_type = "classification"
         if model_metadata['algorithm'] == 'KMEANS':
             KM = LumbaKMeans(df)
             response = KM.train_model()
@@ -197,6 +198,8 @@ def asynctrain(model_metadata):
     if model_metadata['method'] == 'CLASSIFICATION' or model_metadata['method'] == 'REGRESSION' :
         shap_values = calculate_shap_values(model_metadata["model"], df.drop(columns=[model_metadata['target']]), model_type, X_train=response["X_train"], X_test=response["X_test"])
         model_metadata['shap_values'] = shap_values
+    else:
+        shap_values = calculate_shap_values(model_metadata["shap_model"], df, X_test=df)
     # save model to pkl format
     print(model_saved_name)
     requests.put(url,

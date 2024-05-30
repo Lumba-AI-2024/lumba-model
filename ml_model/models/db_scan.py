@@ -3,6 +3,8 @@
 from sklearn.cluster import DBSCAN
 from sklearn.metrics import silhouette_score
 from sklearn.decomposition import PCA
+from sklearn.ensemble import RandomForestClassifier
+
 import optuna
 
 from pandas.core.frame import DataFrame
@@ -66,10 +68,13 @@ class LumbaDBScan:
         silhouette = silhouette_score(X, dbscan_cluster_labels)
 
         self.model = optimal_dbscan
+        
+        shap_model=RandomForestClassifier()
+        shap_model.fit(self.dataframe,dbscan_cluster_labels)
 
         return {
             'model': optimal_dbscan,
-            'cluster_labels': dbscan_cluster_labels,
+            'shap_model': shap_model
             'silhouette_score': f'{silhouette:.4f}'
         }
 
