@@ -41,15 +41,18 @@ uvicorn --reload modeling.asgi:application --port 7000
    BACKEND_API_URL=http://host.docker.internal:8000
    ```
    This is so that any service on localhost is discoverable by the container.
-2. Build the image
+3. Build the images
+   There will be 2 images with 2 different worker configuration. One run the defalt queue, the other run exclusively xgboost.
     ```shell
-    docker build . -t lumba-model-worker -f .\worker.Dockerfile
+    docker build . -t lumba-model-worker:default -f .\worker.Dockerfile
+    docker build . -t lumba-model-worker:xgboost -f .\xgboost-worker.Dockerfile
     ```
-3. Run the image
+4. Run the images
     ```shell
-   docker run -d --name lumba-worker --env-file=.env  lumba-model-worker    
+   docker run -d --name lumba-worker-default --env-file=.env  lumba-model-worker:default
+   docker run -d --name lumba-worker-xgboost --env-file=.env  lumba-model-worker:xgboost 
    ```
-   You can run multiple image either by creating more container with different name or rebuilding the image with the entrypoint:
+   You can configure the image either by creating more container with different name or rebuilding the image with the entrypoint:
    ```shell
    python3 manage.py rqworker-pool --num-workers 3
    ```

@@ -14,4 +14,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy local code to the container image.
 COPY . .
 
-CMD exec python3 manage.py rqworker-pool default --num-workers 3
+CMD exec python3 manage.py rqworker xgboost
