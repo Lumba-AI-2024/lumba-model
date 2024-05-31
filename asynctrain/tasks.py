@@ -145,7 +145,7 @@ def asynctrain(model_metadata):
                 "mse": response["mean_squared_error"]
             }
             model_metadata["model"] = response["model"]
-            model_type == "xgboost"
+            model_type == "regression"
 
     if model_metadata['method'] == 'CLASSIFICATION':
         if model_metadata['algorithm'] == 'DECISION_TREE':
@@ -194,7 +194,7 @@ def asynctrain(model_metadata):
                 "precision_score": response["precision_score"],
                 "f1_score": response["f1_score"]
             }
-            model_type == "xgboost"
+            model_type == "classification"
 
     if model_metadata['method'] == 'CLUSTERING':
         model_type = "classification"
