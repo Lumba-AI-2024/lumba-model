@@ -1,7 +1,7 @@
 from xgboost import XGBClassifier
 from sklearn.model_selection import GridSearchCV,train_test_split, KFold
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score,recall_score,precision_score,f1_score
 import pandas as pd
 
 from pandas.core.frame import DataFrame
@@ -44,6 +44,9 @@ class LumbaXGBoostClassifier:
         best_model = grid_result.best_estimator_
         y_pred = best_model.predict(X_test)
         acc = accuracy_score(y_true=y_test, y_pred=y_pred)
+        recall = recall_score(y_true=y_test, y_pred=y_pred)
+        precision = precision_score(y_true=y_test, y_pred=y_pred)
+        f1 = f1_score(y_true=y_test, y_pred=y_pred)
 
         self.model = best_model
 
@@ -55,7 +58,10 @@ class LumbaXGBoostClassifier:
             'X_train': X_train_df,
             'X_test': X_test_df,
             'best_hyperparams': best_hyperparams,
-            'accuracy_score': f'{acc*100:.4f}'
+            'accuracy_score': acc,
+            'recall_score': recall,
+            'precision_score': precision,
+            'f1_score': f1,
         }
     
     def get_model(self) -> Optional[XGBClassifier]:
