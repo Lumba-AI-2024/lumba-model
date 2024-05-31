@@ -58,8 +58,12 @@ def calculate_shap_values(best_model, X, model_type, X_train=None, X_test=None):
     buf.seek(0)
     img_str = base64.b64encode(buf.read()).decode('utf-8')
     plt.close()
-
-    return img_str
+    
+    feature_importance = dict(zip(X_train.columns, best_model.feature_importances_))
+    feature_importance = dict(sorted(feature_importance.items(), key=lambda x: x[1], reverse=True))
+    
+    # return both img_str and feature_importance
+    return img_str, feature_importance
 
 @job('default', timeout=86400)
 def asynctrain(model_metadata):
@@ -213,13 +217,18 @@ def asynctrain(model_metadata):
     model_saved_name = f"{model_metadata['modelname']}.pkl"
     joblib.dump(response['model'], model_saved_name)
     model_metadata["score"] = json.dumps(model_metadata["score"])
+    
     print(model_metadata["score"])
 
     if model_metadata['method'] == 'CLASSIFICATION' or model_metadata['method'] == 'REGRESSION' :
-        shap_values = calculate_shap_values(model_metadata["model"], df.drop(columns=[model_metadata['target']]), model_type, X_train=response["X_train"], X_test=response["X_test"])
+        img_str, feature_importance = calculate_shap_values(model_metadata["model"], df.drop(columns=[model_metadata['target']]), model_type, X_train=response["X_train"], X_test=response["X_test"])
     else:
-        shap_values = calculate_shap_values(model_metadata["shap_model"],df, model_type, df, X_test=df)
-    model_metadata['shap_values'] = shap_values
+        img_str, feature_importance = calculate_shap_values(model_metadata["shap_model"],df, model_type, df, X_test=df)
+    model_metadata['shap_values'] = {
+        "img_str": img_str,
+        "feature_importance": feature_importance
+                                     }
+    model_metadata["shap_values"] = json.dumps(model_metadata["shap_values"])
     # save model to pkl format
     print(model_saved_name)
     requests.put(url,

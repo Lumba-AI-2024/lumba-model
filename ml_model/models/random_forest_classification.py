@@ -38,10 +38,18 @@ class LumbaRandomForestClassifier:
         # Evaluate the best model and count accuracy
         best_model = grid_result.best_estimator_
         y_pred = best_model.predict(X_test)
+        
+        num_classes = len(pd.unique(y))
+        if num_classes > 2:
+            average_method = 'macro'
+        else:
+            average_method = 'binary'
+
         acc = accuracy_score(y_true=y_test, y_pred=y_pred)
-        recall = recall_score(y_true=y_test, y_pred=y_pred)
-        precision = precision_score(y_true=y_test, y_pred=y_pred)
-        f1 = f1_score(y_true=y_test, y_pred=y_pred)
+        recall = recall_score(y_true=y_test, y_pred=y_pred, average=average_method)
+        precision = precision_score(y_true=y_test, y_pred=y_pred, average=average_method)
+        f1 = f1_score(y_true=y_test, y_pred=y_pred, average=average_method)
+
 
         self.model = best_model
 
