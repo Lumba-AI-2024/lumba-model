@@ -27,10 +27,10 @@ from modeling.settings import BACKEND_API_URL
 
 
 def calculate_shap_values(best_model, X, model_type, X_train=None, X_test=None):
-    if model_type == "classification" or model_type == "rf":
+    if model_type in ["classification", "rf"]:
         explainer = shap.Explainer(best_model)
         shap_values = explainer.shap_values(X_test)
-    elif model_type == "regression" or model_type == "xgboost":
+    elif model_type in ["regression", "xgboost"]:
         explainer = shap.Explainer(best_model, X_train)
         shap_values = explainer.shap_values(X_test)
     elif model_type == "neural_network":
@@ -217,9 +217,9 @@ def asynctrain(model_metadata):
 
     if model_metadata['method'] == 'CLASSIFICATION' or model_metadata['method'] == 'REGRESSION' :
         shap_values = calculate_shap_values(model_metadata["model"], df.drop(columns=[model_metadata['target']]), model_type, X_train=response["X_train"], X_test=response["X_test"])
-        model_metadata['shap_values'] = shap_values
     else:
-        shap_values = calculate_shap_values(model_metadata["shap_model"], df, X_test=df)
+        shap_values = calculate_shap_values(model_metadata["shap_model"],df, model_type, df, X_test=df)
+    model_metadata['shap_values'] = shap_values
     # save model to pkl format
     print(model_saved_name)
     requests.put(url,
