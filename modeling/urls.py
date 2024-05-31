@@ -15,9 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from asynctrain import urls as train_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('train/', include(train_urls)),
+    path('train/', include('asynctrain.urls')),
+    path("django-rq/", include("django_rq.urls")),
 ]

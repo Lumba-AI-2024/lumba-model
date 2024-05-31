@@ -21,8 +21,17 @@
 					"mode": "formdata",
 					"formdata": [
 						{
+							"key": "file",
+							"type": "file",
+							"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+							"filesNotInWorkingDirectory": [
+								"/D:/bhism/Desktop/Kuliah/Semester8/TA/DATASET/DATASET/affairs.csv"
+							],
+							"src": "/D:/bhism/Desktop/Kuliah/Semester8/TA/DATASET/DATASET/affairs.csv"
+						},
+						{
 							"key": "modelname",
-							"value": "affairs",
+							"value": "affairs5",
 							"type": "text"
 						},
 						{
@@ -31,23 +40,13 @@
 							"type": "text"
 						},
 						{
-							"key": "workspace",
-							"value": "ws1100",
-							"type": "text"
-						},
-						{
-							"key": "type",
-							"value": "predicting",
-							"type": "text"
-						},
-						{
 							"key": "username",
 							"value": "hera",
 							"type": "text"
 						},
 						{
-							"key": "dataset_link",
-							"value": "hera/ws1100/predicting/affairs.csv",
+							"key": "workspace",
+							"value": "ws10",
 							"type": "text"
 						},
 						{
@@ -61,11 +60,6 @@
 							"type": "text"
 						},
 						{
-							"key": "metrics",
-							"value": "-",
-							"type": "text"
-						},
-						{
 							"key": "feature",
 							"value": "rate_marriage,age,yrs_married,children,religious,educ,occupation,occupation_husb",
 							"type": "text"
@@ -76,99 +70,9 @@
 							"type": "text"
 						},
 						{
-							"key": "file",
-							"type": "file",
-							"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
-							"filesNotInWorkingDirectory": [
-								"/D:/bhism/Desktop/Kuliah/Semester8/TA/DATASET/DATASET/affairs.csv"
-							],
-							"src": "/D:/bhism/Desktop/Kuliah/Semester8/TA/DATASET/DATASET/affairs.csv",
-							"disabled": true
-						}
-					]
-				},
-				"url": "{{base_url}}/train/"
-			},
-			"response": []
-		},
-		{
-			"name": "train Copy",
-			"id": "f3296432-9017-44e1-aac0-5c413967581c",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "modelname",
-							"value": "affairs",
-							"type": "text"
-						},
-						{
-							"key": "datasetname",
-							"value": "affairs.csv",
-							"type": "text"
-						},
-						{
-							"key": "workspace",
-							"value": "ws1100",
-							"type": "text"
-						},
-						{
-							"key": "type",
-							"value": "predicting",
-							"type": "text"
-						},
-						{
-							"key": "username",
-							"value": "hera",
-							"type": "text"
-						},
-						{
-							"key": "dataset_link",
-							"value": "hera/ws1100/predicting/affairs.csv",
-							"type": "text"
-						},
-						{
-							"key": "method",
-							"value": "REGRESSION",
-							"type": "text"
-						},
-						{
-							"key": "algorithm",
-							"value": "LINEAR",
-							"type": "text"
-						},
-						{
-							"key": "metrics",
-							"value": "-",
-							"type": "text"
-						},
-						{
-							"key": "feature",
-							"value": "rate_marriage,age,yrs_married,children,religious,educ,occupation,occupation_husb",
-							"type": "text"
-						},
-						{
-							"key": "target",
-							"value": "affairs",
-							"type": "text"
-						},
-						{
-							"key": "file",
-							"type": "file",
-							"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
-							"filesNotInWorkingDirectory": [
-								"/D:/bhism/Desktop/Kuliah/Semester8/TA/DATASET/DATASET/affairs.csv"
-							],
-							"src": "/D:/bhism/Desktop/Kuliah/Semester8/TA/DATASET/DATASET/affairs.csv",
+							"key": "file_path",
+							"value": "C:\\Users\\Bhisma\\Desktop\\Skripsi\\lumba-ai\\lumba_api_v2\\directory\\bhisma\\ws1\\affairs_HRB5n3e.csv",
+							"type": "text",
 							"disabled": true
 						}
 					]

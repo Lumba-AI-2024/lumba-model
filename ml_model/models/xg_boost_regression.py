@@ -1,4 +1,4 @@
-from sklearn.linear_model import LinearRegression
+from xgboost import XGBRegressor
 from sklearn.model_selection import GridSearchCV,train_test_split, KFold
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, r2_score, mean_squared_error
@@ -8,8 +8,8 @@ from pandas.core.frame import DataFrame
 
 from typing import Any, Optional, Union, List
 
-class LumbaLinearRegression:
-    model: LinearRegression
+class LumbaXGBoostRegressor:
+    model: XGBRegressor
 
     def __init__(self, dataframe: DataFrame) -> None:
         self.dataframe = dataframe
@@ -41,21 +41,23 @@ class LumbaLinearRegression:
         X = self.dataframe.drop(columns=[target_column_name])
         y = self.dataframe[target_column_name]
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-        
-        lr = LinearRegression()
 
-        # Define the grid search parameters
+        # Define parameter grid
         param_grid = {
-            'fit_intercept': [True, False],  # Whether to calculate the intercept for this model
-            'copy_X': [True, False],  # Whether to make a copy of X before fitting the model
-            'n_jobs': [-1],  # Number of jobs to run in parallel. -1 means using all processors.
-            'positive' : [True, False]
+            'n_estimators': [50, 100, 150],
+            'learning_rate': [0.05, 0.1, 0.15, 0.2],
+            'max_depth': [2, 4, 8, 10],
+            'min_child_weight': [1, 5, 10],
+            'booster':['gbtree','gblinear'],
+            'base_score':[0.25,0.5,0.75,1]
         }
+
+        xg = XGBRegressor(random_state=42)
 
         outer_cv = KFold(n_splits=5, shuffle=True, random_state=42)
 
         # Perform grid search
-        grid = GridSearchCV(estimator=lr, param_grid=param_grid, cv=outer_cv)
+        grid = GridSearchCV(estimator=xg, param_grid=param_grid, cv=outer_cv, scoring='neg_mean_squared_error', verbose=1)
         grid_result = grid.fit(X_train, y_train)  # Assuming X and y are your feature matrix and target vector
         
         best_hyperparams = grid_result.best_params_
@@ -82,7 +84,7 @@ class LumbaLinearRegression:
             'r2_score': f'{r2:.4f}'
         }
     
-    def get_model(self) -> Optional[LinearRegression]:
+    def get_model(self) -> Optional[XGBRegressor]:
         try:
             return self.model
         except AttributeError:

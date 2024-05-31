@@ -9,12 +9,16 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os
 from pathlib import Path
+
+from decouple import config
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -37,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'django_rq',
 
     # project apps
     'asynctrain',
@@ -119,9 +125,40 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = 'staticfiles/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Django RQ Configs
+
+RQ_QUEUES = {
+    "default": {
+        "HOST": "35.219.69.208",
+        "PORT": 6379,
+        "DB": 0,
+        "SSL_CERT_REQS": None,
+        'REDIS_CLIENT_KWARGS': {    # Eventual additional Redis connection arguments
+            'health_check_interval': 30,
+        },
+    },
+    "xgboost": {
+        "HOST": "35.219.69.208",
+        "PORT": 6379,
+        "DB": 4,
+        "SSL_CERT_REQS": None,
+        'REDIS_CLIENT_KWARGS': {    # Eventual additional Redis connection arguments
+            'health_check_interval': 30,
+        },
+    }
+}
+
+RQ = {
+    'DEFAULT_RESULT_TTL': 86400,
+}
+
+BACKEND_API_URL = os.getenv('BACKEND_API_URL')

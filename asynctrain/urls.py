@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import *
+
+from asynctrain.views import async_train_endpoint
 
 urlpatterns = [
     path('', async_train_endpoint),

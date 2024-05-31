@@ -1,13 +1,61 @@
-run django app as an ASGI to enable asynchronous in a server
+# Lumba AI's Modeling Microservice
+Powered by Celery & Minio
 
-1. create virtual environment  
-`virtualenv venv`  
-2. activate virtual environment  
-`source venv/bin/activate`  
-3. install requirements    
-`pip install -r requirements.txt`  
-4. run server  
-`uvicorn --reload modeling.asgi:application --port 7000`
+## Prerequeisites
+### 1. [Minio Object Storage Server](https://min.io/)
+This service pull dataset from a Minio Server from arguments passed in request.
+#### Installation:
+[Minio Container Quick Guide](https://min.io/docs/minio/container/index.html)
+### 2. Redis Server
+This configuration of celery uses redis as the task broker
+#### Installation
+[Redis on Container](https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/docker/)
+## Dev Guide
+
+1. Create and activate virtual environment  
+```shell
+virtualenv venv
+source venv/bin/activate
+```
+2. Install requirements    
+```shell
+pip install -r requirements.txt 
+```
+3. Start Celery Worker
+```shell
+celery -A modeling worker -l info -P eventlet
+```
+4. Monitor tasks with [Flower](https://flower.readthedocs.io/en/latest/)
+```shell
+celery -A modeling flower -l info -P eventlet
+```
+The Flower WebUI should be accessible via http://localhost:5555 (default port). You can specify port by passing the `--port` flag.
+5. Run server 
+```shell
+uvicorn --reload modeling.asgi:application --port 7000
+```
+
+## Django-RQ Integration
+1. Create a `.env` file in projec root with the following content
+   ```
+   BACKEND_API_URL=http://host.docker.internal:8000
+   ```
+   This is so that any service on localhost is discoverable by the container.
+3. Build the images
+   There will be 2 images with 2 different worker configuration. One run the defalt queue, the other run exclusively xgboost.
+    ```shell
+    docker build . -t lumba-model-worker:default -f .\worker.Dockerfile
+    docker build . -t lumba-model-worker:xgboost -f .\xgboost-worker.Dockerfile
+    ```
+4. Run the images
+    ```shell
+   docker run -d --name lumba-worker-default --env-file=.env  lumba-model-worker:default
+   docker run -d --name lumba-worker-xgboost --env-file=.env  lumba-model-worker:xgboost 
+   ```
+   You can configure the image either by creating more container with different name or rebuilding the image with the entrypoint:
+   ```shell
+   python3 manage.py rqworker-pool --num-workers 3
+   ```
 
 # ML Models
 Lumba.ai provides several Machine Learning models that can be used by user depends on their needs.
