@@ -74,23 +74,23 @@ class LumbaNeuralNetworkClassification:
         )
 
         # Define the grid search parameters
-        param_grid = {
-            'model__optimizer': ['adam', 'rmsprop'],
-            'model__activation': ['relu', 'sigmoid'],
-            'model__units1': [32, 64, 128],
-            'model__units2': [16, 32, 64],
-            'model__units3': [8, 16, 32],
-            'epochs': [10, 20, 30, 40,50]  # Adjust the values as needed
-        }
-
         # param_grid = {
-        #     'model__optimizer': ['adam'],
-        #     'model__activation': ['relu'],
-        #     'model__units1': [30, 20],
-        #     'model__units2': [20],
-        #     'model__units3': [10],
-        #     'epochs': [30, 40, 50]  # Adjust the values as needed
+        #     'model__optimizer': ['adam', 'rmsprop'],
+        #     'model__activation': ['relu', 'sigmoid'],
+        #     'model__units1': [32, 64, 128],
+        #     'model__units2': [16, 32, 64],
+        #     'model__units3': [8, 16, 32],
+        #     'epochs': [10, 20, 30, 40,50]  # Adjust the values as needed
         # }
+
+        param_grid = {
+            'model__optimizer': ['adam'],
+            'model__activation': ['relu'],
+            'model__units1': [30, 20],
+            'model__units2': [20],
+            'model__units3': [10],
+            'epochs': [30, 40, 50]  # Adjust the values as needed
+        }
 
         outer_cv = KFold(n_splits=3, shuffle=True, random_state=42)
 
