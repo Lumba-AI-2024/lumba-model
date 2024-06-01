@@ -126,7 +126,8 @@ class LumbaNeuralNetworkRegression:
             'best_hyperparams': best_hyperparams,
             'mean_absolute_error': f'{mae:.4f}',
             'mean_squared_error': f'{mse:.4f}',
-            'r2_score': f'{r2:.4f}'
+            'r2_score': f'{r2:.4f}',
+            'best_hyperparams': best_hyperparams,
         }
     
     def get_model(self) -> Optional[KerasRegressor]:

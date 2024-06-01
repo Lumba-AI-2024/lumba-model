@@ -65,6 +65,7 @@ class LumbaDecisionTreeClassifier:
             'recall_score': recall,
             'precision_score': precision,
             'f1_score': f1,
+            'best_hyperparams': best_hyperparams,
         }
 
     def get_model(self) -> Optional[DecisionTreeClassifier]:

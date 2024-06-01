@@ -97,7 +97,8 @@ def asynctrain(model_metadata):
             model_metadata["score"] = {
                 "r2_score": response["r2_score"],
                 "mae": response["mean_absolute_error"],
-                "mse": response["mean_squared_error"]
+                "mse": response["mean_squared_error"],
+                "best_hyperparams": response["best_hyperparams"]
             }
             model_metadata["model"] = response["model"]
             model_type = "regression"
@@ -109,7 +110,8 @@ def asynctrain(model_metadata):
             model_metadata["score"] = {
                 "r2_score": response["r2_score"],
                 "mae": response["mean_absolute_error"],
-                "mse": response["mean_squared_error"]
+                "mse": response["mean_squared_error"],
+                "best_hyperparams": response["best_hyperparams"]
             }
             model_metadata["model"] = response["model"]
             model_type = "regression"
@@ -120,7 +122,8 @@ def asynctrain(model_metadata):
             model_metadata["score"] = {
                 "r2_score": response["r2_score"],
                 "mae": response["mean_absolute_error"],
-                "mse": response["mean_squared_error"]
+                "mse": response["mean_squared_error"],
+                "best_hyperparams": response["best_hyperparams"]
             }
             model_metadata["model"] = response["model"]
             model_type = "rf"
@@ -131,7 +134,8 @@ def asynctrain(model_metadata):
             model_metadata["score"] = {
                 "r2_score": response["r2_score"],
                 "mae": response["mean_absolute_error"],
-                "mse": response["mean_squared_error"]
+                "mse": response["mean_squared_error"],
+                "best_hyperparams": response["best_hyperparams"]
             }
             model_metadata["model"] = response["model"]
             model_type = "neural_network"
@@ -142,7 +146,8 @@ def asynctrain(model_metadata):
             model_metadata["score"] = {
                 "r2_score": response["r2_score"],
                 "mae": response["mean_absolute_error"],
-                "mse": response["mean_squared_error"]
+                "mse": response["mean_squared_error"],
+                "best_hyperparams": response["best_hyperparams"]
             }
             model_metadata["model"] = response["model"]
             model_type == "regression"
@@ -156,7 +161,8 @@ def asynctrain(model_metadata):
                 "accuracy_score": response["accuracy_score"],
                 "recall_score": response["recall_score"],
                 "precision_score": response["precision_score"],
-                "f1_score": response["f1_score"]
+                "f1_score": response["f1_score"],
+                "best_hyperparams": response["best_hyperparams"]
             }
             model_metadata["model"] = response["model"]
             model_type = "classification"
@@ -168,7 +174,8 @@ def asynctrain(model_metadata):
                 "accuracy_score": response["accuracy_score"],
                 "recall_score": response["recall_score"],
                 "precision_score": response["precision_score"],
-                "f1_score": response["f1_score"]
+                "f1_score": response["f1_score"],
+                "best_hyperparams": response["best_hyperparams"]
             }
             model_metadata["model"] = response["model"]
             model_type = "neural_network"
@@ -180,7 +187,8 @@ def asynctrain(model_metadata):
                 "accuracy_score": response["accuracy_score"],
                 "recall_score": response["recall_score"],
                 "precision_score": response["precision_score"],
-                "f1_score": response["f1_score"]
+                "f1_score": response["f1_score"],
+                "best_hyperparams": response["best_hyperparams"]
             }
             model_metadata["model"] = response["model"]
             model_type = "classification"
@@ -192,7 +200,8 @@ def asynctrain(model_metadata):
                 "accuracy_score": response["accuracy_score"],
                 "recall_score": response["recall_score"],
                 "precision_score": response["precision_score"],
-                "f1_score": response["f1_score"]
+                "f1_score": response["f1_score"],
+                "best_hyperparams": response["best_hyperparams"]
             }
             model_type == "classification"
 
