@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import base64
 from django_rq import job
 import json
-
+import numpy as np
 
 from ml_model.models.linear_regression import LumbaLinearRegression
 from ml_model.models.decision_tree_classification import LumbaDecisionTreeClassifier
@@ -59,8 +59,17 @@ def calculate_shap_values(best_model, X, model_type, X_train=None, X_test=None):
     img_str = base64.b64encode(buf.read()).decode('utf-8')
     plt.close()
     
-    feature_importance = dict(zip(X_train.columns, best_model.feature_importances_))
-    feature_importance = dict(sorted(feature_importance.items(), key=lambda x: x[1], reverse=True))
+    if isinstance(shap_values, list):
+        shap_values = np.array(shap_values) 
+        mean_shap_values = np.mean(np.abs(shap_values), axis=0) 
+    else:
+        mean_shap_values = np.mean(np.abs(shap_values), axis=0)
+
+    feature_importance = np.mean(mean_shap_values, axis=0)
+    feature_importance_dict = dict(zip(X_train.columns, feature_importance))
+
+    # Mengurutkan fitur berdasarkan kepentingannya
+    feature_importance = dict(sorted(feature_importance_dict.items(), key=lambda x: x[1], reverse=True))
     
     # return both img_str and feature_importance
     return img_str, feature_importance
