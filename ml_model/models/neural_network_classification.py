@@ -17,7 +17,7 @@ from sklearn.metrics import accuracy_score,recall_score,precision_score,f1_score
 import pandas as pd
 from pandas import DataFrame, Series
 from tensorflow.keras.utils import to_categorical
-
+import time
 from typing import Any, Optional, Union, List
 
 def create_model(optimizer='adam', activation='relu', units1=30, units2=20, units3=10, input_shape=(10,), num_classes=1):
@@ -102,8 +102,9 @@ class LumbaNeuralNetworkClassification:
 
         # Evaluate the best model and count accuracy
         best_model = grid_result.best_estimator_
+        start_time = time.time()
         y_pred = best_model.predict(X_test)
-        
+        end_time = time.time()
         if num_classes > 2:
             y_test = np.argmax(y_test, axis=1)
             y_pred = np.argmax(y_pred, axis=1)
@@ -115,7 +116,7 @@ class LumbaNeuralNetworkClassification:
         recall = recall_score(y_true=y_test, y_pred=y_pred, average=average_method)
         precision = precision_score(y_true=y_test, y_pred=y_pred, average=average_method)
         f1 = f1_score(y_true=y_test, y_pred=y_pred, average=average_method)
-
+        elapsed_time = end_time - start_time
         self.model = best_model
 
         X_test_df = pd.DataFrame(X_test, columns=self.dataframe.drop(columns=[target_column_name]).columns)
@@ -131,6 +132,7 @@ class LumbaNeuralNetworkClassification:
             'precision_score': precision,
             'f1_score': f1,
             'best_hyperparams': best_hyperparams,
+            'time': elapsed_time
         }
     
     def get_model(self) -> Optional[KerasClassifier]:

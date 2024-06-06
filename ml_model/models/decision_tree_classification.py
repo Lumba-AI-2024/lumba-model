@@ -2,6 +2,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import GridSearchCV,train_test_split, KFold
 from sklearn.metrics import accuracy_score,recall_score,precision_score,f1_score
 import pandas as pd
+import time
 
 import pandas as pd
 from pandas import DataFrame, Series
@@ -39,7 +40,12 @@ class LumbaDecisionTreeClassifier:
 
         # Evaluate the best model and count accuracy
         best_model = grid_result.best_estimator_
+        
+        start_time = time.time()
+        
         y_pred = best_model.predict(X_test)
+        
+        end_time = time.time()
         
         num_classes = len(pd.unique(y))
         if num_classes > 2:
@@ -51,7 +57,7 @@ class LumbaDecisionTreeClassifier:
         recall = recall_score(y_true=y_test, y_pred=y_pred, average=average_method)
         precision = precision_score(y_true=y_test, y_pred=y_pred, average=average_method)
         f1 = f1_score(y_true=y_test, y_pred=y_pred, average=average_method)
-
+        elapsed_time = end_time - start_time
     
         self.model = best_model
         X_test_df = pd.DataFrame(X_test, columns=self.dataframe.drop(columns=[target_column_name]).columns)
@@ -66,6 +72,7 @@ class LumbaDecisionTreeClassifier:
             'precision_score': precision,
             'f1_score': f1,
             'best_hyperparams': best_hyperparams,
+            'time': elapsed_time
         }
 
     def get_model(self) -> Optional[DecisionTreeClassifier]:
