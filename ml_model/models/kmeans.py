@@ -59,11 +59,14 @@ class LumbaKMeans:
         
         shap_model=RandomForestClassifier()
         shap_model.fit(self.dataframe,kmeans_cluster_labels)
+        
+        best_hyperparams = kmeans_study.best_params
 
         return {
             'model': km_model,
             'shap_model': shap_model,
-            'silhouette_score': f'{silhouette:.4f}'
+            'silhouette_score': f'{silhouette:.4f}',
+            'best_hyperparams': best_hyperparams
         }
 
     def get_model(self) -> Optional[KMeans]:

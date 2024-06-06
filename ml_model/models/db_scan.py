@@ -71,11 +71,14 @@ class LumbaDBScan:
         
         shap_model=RandomForestClassifier()
         shap_model.fit(self.dataframe,dbscan_cluster_labels)
+        
+        best_hyperparameters = dbscan_study.best_params
 
         return {
             'model': optimal_dbscan,
             'shap_model': shap_model,
-            'silhouette_score': f'{silhouette:.4f}'
+            'silhouette_score': f'{silhouette:.4f}',
+            'best_hyperparams': best_hyperparameters
         }
 
     def get_model(self) -> Optional[DBSCAN]:
