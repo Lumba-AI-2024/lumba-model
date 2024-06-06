@@ -233,14 +233,21 @@ def asynctrain(model_metadata):
             KM = LumbaKMeans(df)
             response = KM.train_model()
             model_metadata["metrics"] = "silhouette_score"
-            model_metadata["score"] = response["silhouette_score"]
+            model_metadata["score"] = {
+                "silhouette_score" : response["silhouette_score"],
+                "best_hyperparams": response["best_hyperparams"]
+            }
             model_metadata["model"] = response["model"]
             model_metadata["shap_model"] = response["shap_model"]
+            
         if model_metadata['algorithm'] == 'DBSCAN':
             DB = LumbaDBScan(df)
             response = DB.train_model()
             model_metadata["metrics"] = "silhouette_score"
-            model_metadata["score"] = response["silhouette_score"]
+            model_metadata["score"] = {
+                "silhouette_score" : response["silhouette_score"],
+                "best_hyperparams": response["best_hyperparams"]
+            }
             model_metadata["model"] = response["model"]
             model_metadata["shap_model"] = response["shap_model"]
 
