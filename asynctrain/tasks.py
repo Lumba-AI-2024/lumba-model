@@ -59,21 +59,19 @@ def calculate_shap_values(best_model, X, model_type, X_train=None, X_test=None):
     img_str = base64.b64encode(buf.read()).decode('utf-8')
     plt.close()
     
-    # if isinstance(shap_values, list):
-    #     shap_values = np.array(shap_values) 
-    #     mean_shap_values = np.mean(np.abs(shap_values), axis=0) 
-    # else:
-    #     mean_shap_values = np.mean(np.abs(shap_values), axis=0)
+    if isinstance(shap_values, list):
+        shap_values = np.array(shap_values) 
+        mean_shap_values = np.mean(np.abs(shap_values), axis=0) 
+    else:
+        mean_shap_values = np.mean(np.abs(shap_values), axis=0)
     
-    # if isinstance(mean_shap_values, np.float64):
-    #     mean_shap_values = np.array([mean_shap_values])
+    feature_importance = np.mean(mean_shap_values, axis=0)
+    if type(feature_importance) == np.float64:
+        feature_importance = mean_shap_values
+    feature_importance_dict = dict(zip(X_train.columns, feature_importance))
 
-    # feature_importance = np.mean(mean_shap_values, axis=0)
-    # feature_importance_dict = dict(zip(X_train.columns, feature_importance))
-
-    # # Mengurutkan fitur berdasarkan kepentingannya
-    # feature_importance = dict(sorted(feature_importance_dict.items(), key=lambda x: x[1], reverse=True))
-    feature_importance = {}
+    # Mengurutkan fitur berdasarkan kepentingannya
+    feature_importance = dict(sorted(feature_importance_dict.items(), key=lambda x: x[1], reverse=True))
 
     # return both img_str and feature_importance
     return img_str, feature_importance
