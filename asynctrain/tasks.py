@@ -233,7 +233,8 @@ def asynctrain(model_metadata):
             model_metadata["metrics"] = "silhouette_score"
             model_metadata["score"] = {
                 "silhouette_score" : response["silhouette_score"],
-                "best_hyperparams": response["best_hyperparams"]
+                "best_hyperparams": response["best_hyperparams"],
+                "time":response["time"]
             }
             model_metadata["model"] = response["model"]
             model_metadata["shap_model"] = response["shap_model"]
@@ -244,7 +245,8 @@ def asynctrain(model_metadata):
             model_metadata["metrics"] = "silhouette_score"
             model_metadata["score"] = {
                 "silhouette_score" : response["silhouette_score"],
-                "best_hyperparams": response["best_hyperparams"]
+                "best_hyperparams": response["best_hyperparams"],
+                "time":response["time"]
             }
             model_metadata["model"] = response["model"]
             model_metadata["shap_model"] = response["shap_model"]
