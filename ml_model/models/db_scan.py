@@ -6,6 +6,7 @@ from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestClassifier
 
 import optuna
+import time
 
 from pandas.core.frame import DataFrame
 
@@ -59,7 +60,10 @@ class LumbaDBScan:
         optimal_dbscan_algorithm = dbscan_study.best_params['algorithm']
 
         optimal_dbscan = DBSCAN(eps=optimal_dbscan_eps, min_samples=optimal_dbscan_min_samples, metric=optimal_dbscan_metric, algorithm=optimal_dbscan_algorithm)
+        start_time = time.time()
         optimal_dbscan.fit(X)
+        end_time = time.time()
+        elapsed_time = end_time - start_time
 
         # predicted cluster labels
         dbscan_cluster_labels = optimal_dbscan.labels_
@@ -78,7 +82,8 @@ class LumbaDBScan:
             'model': optimal_dbscan,
             'shap_model': shap_model,
             'silhouette_score': f'{silhouette:.4f}',
-            'best_hyperparams': best_hyperparameters
+            'best_hyperparams': best_hyperparameters,
+            'time': elapsed_time,
         }
 
     def get_model(self) -> Optional[DBSCAN]:
