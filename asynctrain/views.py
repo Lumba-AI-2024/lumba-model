@@ -17,7 +17,7 @@ def async_train_endpoint(request):
 
     if (model_metadata['algorithm'] == 'XG_BOOST') :
         queue = django_rq.get_queue('xgboost')
-        queue.enqueue(asynctrain, model_metadata)
+        async_result = queue.enqueue(asynctrain, model_metadata)
     else:
         async_result = asynctrain.delay(model_metadata)
 
