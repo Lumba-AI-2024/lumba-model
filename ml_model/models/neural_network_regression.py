@@ -9,7 +9,7 @@ from sklearn.model_selection import GridSearchCV,train_test_split, KFold
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_absolute_error, r2_score, mean_squared_error
 import pandas as pd
-
+import time
 from pandas.core.frame import DataFrame
 
 from typing import Any, Optional, Union, List
@@ -109,7 +109,9 @@ class LumbaNeuralNetworkRegression:
 
         # Evaluate the best model and count accuracy
         best_model = grid_result.best_estimator_
+        start_time = time.time()
         y_pred = best_model.predict(X_test)
+        end_time = time.time()
         r2 = r2_score(y_true=y_test, y_pred=y_pred)
         mae = mean_absolute_error(y_true=y_test, y_pred=y_pred)
         mse = mean_squared_error(y_true=y_test, y_pred=y_pred)
@@ -118,7 +120,7 @@ class LumbaNeuralNetworkRegression:
 
         X_test_df = pd.DataFrame(X_test, columns=self.dataframe.drop(columns=[target_column_name]).columns)
         X_train_df = pd.DataFrame(X_train, columns=self.dataframe.drop(columns=[target_column_name]).columns)
-        
+        elapsed_time = end_time - start_time
         return {
             'model': best_model,
             'X_train': X_train_df,
@@ -128,6 +130,7 @@ class LumbaNeuralNetworkRegression:
             'mean_squared_error': f'{mse:.4f}',
             'r2_score': f'{r2:.4f}',
             'best_hyperparams': best_hyperparams,
+            'time': elapsed_time
         }
     
     def get_model(self) -> Optional[KerasRegressor]:

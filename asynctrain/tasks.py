@@ -59,21 +59,19 @@ def calculate_shap_values(best_model, X, model_type, X_train=None, X_test=None):
     img_str = base64.b64encode(buf.read()).decode('utf-8')
     plt.close()
     
-    # if isinstance(shap_values, list):
-    #     shap_values = np.array(shap_values) 
-    #     mean_shap_values = np.mean(np.abs(shap_values), axis=0) 
-    # else:
-    #     mean_shap_values = np.mean(np.abs(shap_values), axis=0)
+    if isinstance(shap_values, list):
+        shap_values = np.array(shap_values) 
+        mean_shap_values = np.mean(np.abs(shap_values), axis=0) 
+    else:
+        mean_shap_values = np.mean(np.abs(shap_values), axis=0)
     
-    # if isinstance(mean_shap_values, np.float64):
-    #     mean_shap_values = np.array([mean_shap_values])
+    feature_importance = np.mean(mean_shap_values, axis=0)
+    if type(feature_importance) == np.float64:
+        feature_importance = mean_shap_values
+    feature_importance_dict = dict(zip(X_train.columns, feature_importance))
 
-    # feature_importance = np.mean(mean_shap_values, axis=0)
-    # feature_importance_dict = dict(zip(X_train.columns, feature_importance))
-
-    # # Mengurutkan fitur berdasarkan kepentingannya
-    # feature_importance = dict(sorted(feature_importance_dict.items(), key=lambda x: x[1], reverse=True))
-    feature_importance = {}
+    # Mengurutkan fitur berdasarkan kepentingannya
+    feature_importance = dict(sorted(feature_importance_dict.items(), key=lambda x: x[1], reverse=True))
 
     # return both img_str and feature_importance
     return img_str, feature_importance
@@ -111,7 +109,8 @@ def asynctrain(model_metadata):
                 "r2_score": response["r2_score"],
                 "mae": response["mean_absolute_error"],
                 "mse": response["mean_squared_error"],
-                "best_hyperparams": response["best_hyperparams"]
+                "best_hyperparams": response["best_hyperparams"],
+                "time":response["time"]
             }
             model_metadata["model"] = response["model"]
             model_type = "regression"
@@ -124,7 +123,8 @@ def asynctrain(model_metadata):
                 "r2_score": response["r2_score"],
                 "mae": response["mean_absolute_error"],
                 "mse": response["mean_squared_error"],
-                "best_hyperparams": response["best_hyperparams"]
+                "best_hyperparams": response["best_hyperparams"],
+                "time":response["time"]
             }
             model_metadata["model"] = response["model"]
             model_type = "regression"
@@ -136,7 +136,8 @@ def asynctrain(model_metadata):
                 "r2_score": response["r2_score"],
                 "mae": response["mean_absolute_error"],
                 "mse": response["mean_squared_error"],
-                "best_hyperparams": response["best_hyperparams"]
+                "best_hyperparams": response["best_hyperparams"],
+                "time":response["time"]
             }
             model_metadata["model"] = response["model"]
             model_type = "rf"
@@ -148,7 +149,8 @@ def asynctrain(model_metadata):
                 "r2_score": response["r2_score"],
                 "mae": response["mean_absolute_error"],
                 "mse": response["mean_squared_error"],
-                "best_hyperparams": response["best_hyperparams"]
+                "best_hyperparams": response["best_hyperparams"],
+                "time":response["time"]
             }
             model_metadata["model"] = response["model"]
             model_type = "neural_network"
@@ -160,7 +162,8 @@ def asynctrain(model_metadata):
                 "r2_score": response["r2_score"],
                 "mae": response["mean_absolute_error"],
                 "mse": response["mean_squared_error"],
-                "best_hyperparams": response["best_hyperparams"]
+                "best_hyperparams": response["best_hyperparams"],
+                "time":response["time"]
             }
             model_metadata["model"] = response["model"]
             model_type == "regression"
@@ -175,7 +178,8 @@ def asynctrain(model_metadata):
                 "recall_score": response["recall_score"],
                 "precision_score": response["precision_score"],
                 "f1_score": response["f1_score"],
-                "best_hyperparams": response["best_hyperparams"]
+                "best_hyperparams": response["best_hyperparams"],
+                "time":response["time"]
             }
             model_metadata["model"] = response["model"]
             model_type = "classification"
@@ -188,7 +192,8 @@ def asynctrain(model_metadata):
                 "recall_score": response["recall_score"],
                 "precision_score": response["precision_score"],
                 "f1_score": response["f1_score"],
-                "best_hyperparams": response["best_hyperparams"]
+                "best_hyperparams": response["best_hyperparams"],
+                "time":response["time"]
             }
             model_metadata["model"] = response["model"]
             model_type = "neural_network"
@@ -201,7 +206,8 @@ def asynctrain(model_metadata):
                 "recall_score": response["recall_score"],
                 "precision_score": response["precision_score"],
                 "f1_score": response["f1_score"],
-                "best_hyperparams": response["best_hyperparams"]
+                "best_hyperparams": response["best_hyperparams"],
+                "time":response["time"]
             }
             model_metadata["model"] = response["model"]
             model_type = "classification"
@@ -214,7 +220,8 @@ def asynctrain(model_metadata):
                 "recall_score": response["recall_score"],
                 "precision_score": response["precision_score"],
                 "f1_score": response["f1_score"],
-                "best_hyperparams": response["best_hyperparams"]
+                "best_hyperparams": response["best_hyperparams"],
+                "time":response["time"]
             }
             model_type == "classification"
 
@@ -224,14 +231,23 @@ def asynctrain(model_metadata):
             KM = LumbaKMeans(df)
             response = KM.train_model()
             model_metadata["metrics"] = "silhouette_score"
-            model_metadata["score"] = response["silhouette_score"]
+            model_metadata["score"] = {
+                "silhouette_score" : response["silhouette_score"],
+                "best_hyperparams": response["best_hyperparams"],
+                "time":response["time"]
+            }
             model_metadata["model"] = response["model"]
             model_metadata["shap_model"] = response["shap_model"]
+            
         if model_metadata['algorithm'] == 'DBSCAN':
             DB = LumbaDBScan(df)
             response = DB.train_model()
             model_metadata["metrics"] = "silhouette_score"
-            model_metadata["score"] = response["silhouette_score"]
+            model_metadata["score"] = {
+                "silhouette_score" : response["silhouette_score"],
+                "best_hyperparams": response["best_hyperparams"],
+                "time":response["time"]
+            }
             model_metadata["model"] = response["model"]
             model_metadata["shap_model"] = response["shap_model"]
 

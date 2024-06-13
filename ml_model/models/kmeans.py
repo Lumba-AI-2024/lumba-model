@@ -5,6 +5,7 @@ from sklearn.metrics import silhouette_score
 from sklearn.decomposition import PCA
 
 import optuna
+import time
 
 from pandas.core.frame import DataFrame
 
@@ -47,7 +48,11 @@ class LumbaKMeans:
         k = optimal_kmeans_n_clusters
 
         km_model = KMeans(n_clusters=k, random_state=42, init='k-means++')
+        start_time = time.time()
         km_model.fit_predict(X)
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        
 
         # predicted cluster labels
         kmeans_cluster_labels = km_model.labels_
@@ -59,11 +64,15 @@ class LumbaKMeans:
         
         shap_model=RandomForestClassifier()
         shap_model.fit(self.dataframe,kmeans_cluster_labels)
+        
+        best_hyperparams = kmeans_study.best_params
 
         return {
             'model': km_model,
             'shap_model': shap_model,
-            'silhouette_score': f'{silhouette:.4f}'
+            'silhouette_score': f'{silhouette:.4f}',
+            'best_hyperparams': best_hyperparams,
+            'time': elapsed_time,
         }
 
     def get_model(self) -> Optional[KMeans]:
