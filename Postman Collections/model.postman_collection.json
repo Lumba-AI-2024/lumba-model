@@ -21,17 +21,94 @@
 					"mode": "formdata",
 					"formdata": [
 						{
+							"key": "modelname",
+							"value": "standardization_RANDOM_FOREST_wineqq",
+							"type": "text"
+						},
+						{
+							"key": "datasetname",
+							"value": "standardization_winequality-red.csv",
+							"type": "text"
+						},
+						{
+							"key": "workspace",
+							"value": "ws10",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "predicting",
+							"type": "text"
+						},
+						{
+							"key": "username",
+							"value": "gbhisma",
+							"type": "text"
+						},
+						{
+							"key": "dataset_link",
+							"value": "http://34.128.117.19:9000/lumba-directory/gbhisma/ws10/predicting/standardization_winequality-red.csv?AWSAccessKeyId=zl6ggTd5WUAaV2NMaGJj&Signature=j0PP78v2FKpWDZfoAp4B7I%2BiZrA%3D&Expires=1717903136",
+							"type": "text"
+						},
+						{
+							"key": "method",
+							"value": "REGRESSION",
+							"type": "text"
+						},
+						{
+							"key": "algorithm",
+							"value": "RANDOM_FOREST",
+							"type": "text"
+						},
+						{
+							"key": "metrics",
+							"value": "-",
+							"type": "text"
+						},
+						{
+							"key": "feature",
+							"value": "fixed acidity,volatile acidity,citric acid,residual sugar,chlorides,free sulfur dioxide,total sulfur dioxide,density,pH,sulphates,alcohol",
+							"type": "text"
+						},
+						{
+							"key": "target",
+							"value": "quality",
+							"type": "text"
+						},
+						{
 							"key": "file",
 							"type": "file",
 							"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
 							"filesNotInWorkingDirectory": [
 								"/D:/bhism/Desktop/Kuliah/Semester8/TA/DATASET/DATASET/affairs.csv"
 							],
-							"src": "/D:/bhism/Desktop/Kuliah/Semester8/TA/DATASET/DATASET/affairs.csv"
-						},
+							"src": "/D:/bhism/Desktop/Kuliah/Semester8/TA/DATASET/DATASET/affairs.csv",
+							"disabled": true
+						}
+					]
+				},
+				"url": "http://127.0.0.1:7000/train/"
+			},
+			"response": []
+		},
+		{
+			"name": "train Copy",
+			"id": "f3296432-9017-44e1-aac0-5c413967581c",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
 						{
 							"key": "modelname",
-							"value": "affairs5",
+							"value": "affairs",
 							"type": "text"
 						},
 						{
@@ -40,13 +117,23 @@
 							"type": "text"
 						},
 						{
+							"key": "workspace",
+							"value": "ws1100",
+							"type": "text"
+						},
+						{
+							"key": "type",
+							"value": "predicting",
+							"type": "text"
+						},
+						{
 							"key": "username",
 							"value": "hera",
 							"type": "text"
 						},
 						{
-							"key": "workspace",
-							"value": "ws10",
+							"key": "dataset_link",
+							"value": "hera/ws1100/predicting/affairs.csv",
 							"type": "text"
 						},
 						{
@@ -60,6 +147,11 @@
 							"type": "text"
 						},
 						{
+							"key": "metrics",
+							"value": "-",
+							"type": "text"
+						},
+						{
 							"key": "feature",
 							"value": "rate_marriage,age,yrs_married,children,religious,educ,occupation,occupation_husb",
 							"type": "text"
@@ -70,9 +162,13 @@
 							"type": "text"
 						},
 						{
-							"key": "file_path",
-							"value": "C:\\Users\\Bhisma\\Desktop\\Skripsi\\lumba-ai\\lumba_api_v2\\directory\\bhisma\\ws1\\affairs_HRB5n3e.csv",
-							"type": "text",
+							"key": "file",
+							"type": "file",
+							"fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+							"filesNotInWorkingDirectory": [
+								"/D:/bhism/Desktop/Kuliah/Semester8/TA/DATASET/DATASET/affairs.csv"
+							],
+							"src": "/D:/bhism/Desktop/Kuliah/Semester8/TA/DATASET/DATASET/affairs.csv",
 							"disabled": true
 						}
 					]
