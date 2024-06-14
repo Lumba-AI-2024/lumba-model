@@ -27,10 +27,10 @@ from modeling.settings import BACKEND_API_URL
 
 
 def calculate_shap_values(best_model, X, model_type, X_train=None, X_test=None):
-    if model_type in ["classification", "rf"]:
+    if model_type in ["classification", "rf","xgboost"]:
         explainer = shap.Explainer(best_model)
         shap_values = explainer.shap_values(X_test)
-    elif model_type in ["regression", "xgboost"]:
+    elif model_type in ["regression"]:
         explainer = shap.Explainer(best_model, X_train)
         shap_values = explainer.shap_values(X_test)
     elif model_type == "neural_network":
@@ -166,7 +166,7 @@ def asynctrain(model_metadata):
                 "time":response["time"]
             }
             model_metadata["model"] = response["model"]
-            model_type == "regression"
+            model_type == "xgboost"
 
     if model_metadata['method'] == 'CLASSIFICATION':
         if model_metadata['algorithm'] == 'DECISION_TREE':
@@ -223,7 +223,7 @@ def asynctrain(model_metadata):
                 "best_hyperparams": response["best_hyperparams"],
                 "time":response["time"]
             }
-            model_type == "classification"
+            model_type == "xgboost"
 
     if model_metadata['method'] == 'CLUSTERING':
         model_type = "classification"
