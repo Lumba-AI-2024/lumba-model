@@ -223,6 +223,7 @@ def asynctrain(model_metadata):
                 "best_hyperparams": response["best_hyperparams"],
                 "time":response["time"]
             }
+            model_metadata["model"] = response["model"]
             model_type == "xgboost"
 
     if model_metadata['method'] == 'CLUSTERING':
