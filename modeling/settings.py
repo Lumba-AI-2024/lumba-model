@@ -90,6 +90,18 @@ DATABASES = {
     }
 }
 
+if os.getenv('ENV') == 'prod':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.getenv('PSQL_WORKER_DB_NAME'),
+            'USER': os.getenv('PSQL_USER'),
+            'PASSWORD': os.getenv('PSQL_PASSWORD'),
+            'HOST': os.getenv('PSQL_HOST'),  # Set to the database host, e.g., 'localhost' or '127.0.0.1'
+            'PORT': '5432',  # Set to the database port, default is '5432' for PostgreSQL
+            'CONN_MAX_AGE': None,
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -138,19 +150,20 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 RQ_QUEUES = {
     "default": {
-        "HOST": "35.219.69.208",
+        "HOST": "34.128.117.19",
         "PORT": 6379,
-        "DB": 0,
+        "DB": os.getenv('REDIS_QUEUE_DEFAULT'),
         "SSL_CERT_REQS": None,
         'REDIS_CLIENT_KWARGS': {    # Eventual additional Redis connection arguments
             'health_check_interval': 30,
         },
     },
     "xgboost": {
-        "HOST": "35.219.69.208",
+        "HOST": "34.128.117.19",
         "PORT": 6379,
-        "DB": 4,
+        "DB": os.getenv('REDIS_QUEUE_XGBOOST'),
         "SSL_CERT_REQS": None,
+        'DEFAULT_TIMEOUT': 86400,
         'REDIS_CLIENT_KWARGS': {    # Eventual additional Redis connection arguments
             'health_check_interval': 30,
         },
@@ -161,4 +174,4 @@ RQ = {
     'DEFAULT_RESULT_TTL': 86400,
 }
 
-BACKEND_API_URL = os.getenv('BACKEND_API_URL')
+BACKEND_API_URL = 'http://' + os.getenv('BACKEND_API_URL')
